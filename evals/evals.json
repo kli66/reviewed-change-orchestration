@@ -7,6 +7,7 @@
       "expected_output": "The workflow routes implementation economically, creates one owned worktree from the current landing HEAD, keeps review read-only, uses a narrow fixer only if needed, creates one orchestrator-owned neutral commit, fast-forwards it, verifies the merged state, and cleans only owned state.",
       "assertions": [
         "Chooses the economical implementation tier for the mechanical one-to-two-file item while assigning review capability by actual risk.",
+        "Records policy tier, overrides, effective tier, model, effort, rationale, and fallback or escalation for every dispatch.",
         "Uses an owned isolated worktree and reserves staging, commit, integration, and cleanup for the orchestrator.",
         "Requires fresh focused and final-fixed-point evidence without redundant full-suite repetition.",
         "Uses a Conventional Commit header, keeps the body under 50 words, and includes no agent attribution anywhere in the message."
@@ -53,6 +54,17 @@
       "assertions": [
         "Declines the reviewed-change orchestration ceremony for a trivial edit.",
         "Does not manufacture independent agents, lifecycle reconciliation, or an item worktree for the typo."
+      ],
+      "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "Land the accepted migration using our repository's .reviewed-change-orchestration.toml. It pins the standard tier to a locally available model, requests strongest review, and requests an economical implementer even though the change handles authentication state.",
+      "expected_output": "The workflow validates and applies the repository-local config, records every resolved selection, honors the stronger reviewer override, refuses to silently lower the security-sensitive implementer below the policy floor, and reports the override conflict or obtains explicit user acceptance.",
+      "assertions": [
+        "Validates schema version, supported keys and values, and configured model availability before dispatch.",
+        "Records config source, policy tier, effective tier, resolved model and effort, rationale, and fallback or escalation.",
+        "Honors capability-raising overrides but does not silently weaken the security policy floor."
       ],
       "files": []
     }

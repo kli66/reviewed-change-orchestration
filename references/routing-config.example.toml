@@ -1,0 +1,42 @@
+# Copy to <target-repo>/.reviewed-change-orchestration.toml only when
+# repository-local manual routing overrides are needed.
+schema_version = 1
+
+# Map portable tiers to model IDs and effort values exposed by the host.
+# Omit any field that should remain auto-resolved.
+[tiers.economical]
+# model = "host-model-id"
+# effort = "medium"
+
+[tiers.standard]
+# model = "host-model-id"
+# effort = "high"
+
+[tiers.strongest]
+# model = "host-model-id"
+# effort = "high"
+
+# Role overrides accept tier = "auto", "economical", "standard", or
+# "strongest". Optional model/effort values override the selected tier's
+# mapping for that role, but require a non-"auto" tier so capability can be
+# checked against the policy floor. Lower-than-policy requests are recorded
+# but do not silently weaken that floor.
+[roles.implementer]
+tier = "auto"
+# model = "host-model-id"
+# effort = "medium"
+
+[roles.reviewer]
+tier = "auto"
+# model = "host-model-id"
+# effort = "high"
+
+[roles.fixer]
+tier = "auto"
+# model = "host-model-id"
+# effort = "medium"
+
+[roles.re_review]
+tier = "auto"
+# model = "host-model-id"
+# effort = "medium"

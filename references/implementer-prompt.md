@@ -8,6 +8,9 @@ Implement accepted change [CHANGE_REFERENCE].
 Work only in this item worktree: [ABSOLUTE_WORKTREE_PATH]
 Start commit: [ITEM_START_COMMIT]
 
+Model selection record:
+[MODEL_SELECTION_RECORD]
+
 Read the complete accepted change artifact and repository instructions first.
 
 Accepted requirements and exclusions:

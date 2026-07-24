@@ -9,6 +9,9 @@ Work only in this item worktree: [ABSOLUTE_WORKTREE_PATH]
 Start commit: [ITEM_START_COMMIT]
 Fix round: [ROUND] of 3
 
+Model selection record:
+[MODEL_SELECTION_RECORD]
+
 Accepted requirements and exclusions:
 [REQUIREMENTS_AND_EXCLUSIONS]
 

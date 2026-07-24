@@ -8,6 +8,9 @@ Independently review accepted change [CHANGE_REFERENCE]. Do not edit anything.
 Item worktree: [ABSOLUTE_WORKTREE_PATH]
 Start commit: [ITEM_START_COMMIT]
 
+Model selection record:
+[MODEL_SELECTION_RECORD]
+
 Read the accepted artifact, repository instructions, current status, changed and untracked files, actual diff, implementation, and tests.
 
 Accepted requirements and exclusions:

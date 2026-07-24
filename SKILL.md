@@ -24,7 +24,7 @@ Use this workflow only when independent review and isolation justify their cost.
 Read these files before the corresponding phase:
 
 - `references/worktree-lifecycle.md` before creating, integrating, or removing an item worktree.
-- `references/model-routing.md` before every implementer, reviewer, fixer, or re-review dispatch.
+- `references/model-routing.md` before every implementer, reviewer, fixer, or re-review dispatch. It defines selection records and optional `.reviewed-change-orchestration.toml` overrides.
 - `references/validation-policy.md` while building the execution map and before claiming a boundary is complete.
 - `references/orchestrator-checklist.md` throughout each item.
 - The applicable role prompt before delegating implementation, review, or fixes.
@@ -38,6 +38,7 @@ For each item, record:
 - owned files, expected durable-document mutations, and later overlaps;
 - focused checks, canonical repository gate, and any live verification;
 - worktree and temporary branch names;
+- one model-selection record per planned dispatch, updated before any retry or escalation;
 - Conventional Commit header (`type(scope): description`, omitting scope when unnecessary) and a body under 50 words;
 - protected unrelated paths.
 
@@ -61,13 +62,13 @@ For repositories without `doc-contract`, perform the repository's equivalent ent
 
 ### 3. Delegate implementation
 
-Instantiate `references/implementer-prompt.md` with the absolute item-worktree path and execution map. The implementer may edit only the item worktree and runs focused validation. It may not stage, commit, merge, land, archive, create or delete branches/worktrees, or edit the landing checkout.
+Resolve and record the implementer model selection using `references/model-routing.md`, then instantiate `references/implementer-prompt.md` with that record, the absolute item-worktree path, and the execution map. The implementer may edit only the item worktree and runs focused validation. It may not stage, commit, merge, land, archive, create or delete branches/worktrees, or edit the landing checkout.
 
 Inspect the resulting status, changed files, diff, and test evidence yourself. An agent report never proves the worktree state.
 
 ### 4. Obtain independent review
 
-Instantiate `references/reviewer-prompt.md` for a fresh-context, read-only reviewer. Give it:
+Resolve and record an independent reviewer selection, then instantiate `references/reviewer-prompt.md` for a fresh-context, read-only reviewer. Give it:
 
 - the accepted requirements and exclusions;
 - the item start commit and absolute worktree path;
@@ -85,7 +86,7 @@ Critical or Important findings, failed compliance, or a confirmed acceptance gap
 3. Run affected focused checks.
 4. Dispatch a scoped read-only re-review of the fixes and open findings.
 
-Use at most three fix rounds. After two materially unsuccessful attempts, increase model capability or change the task framing instead of repeating the same dispatch. If a load-bearing finding remains after the third round, retain the worktree and branch and stop for user direction.
+Create a fresh selection record for every fixer and re-review dispatch. Use at most three fix rounds. After two materially unsuccessful attempts, increase model capability or change the task framing instead of repeating the same dispatch, and record the escalation. If a load-bearing finding remains after the third round, retain the worktree and branch and stop for user direction.
 
 Record Minor findings explicitly; fix them when low-risk and in scope, otherwise report them as residual risk.
 
@@ -128,6 +129,7 @@ After the final item:
 1. Run one repository-wide canonical gate on the landing branch.
 2. Confirm all intended lifecycle items landed and no owned worktree or temporary branch remains.
 3. Report commits in landing order, review-found defects, exact validation evidence, residual findings, and unrelated material left untouched.
+4. Report model-selection records in dispatch order, including overrides, fallbacks, and escalations.
 
 Never describe focused checks as the full gate, a reviewed diff as committed, or an item commit as landed before merged-state verification succeeds.
 

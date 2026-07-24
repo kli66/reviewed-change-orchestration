@@ -5,7 +5,8 @@
 - Confirm accepted status and implementation/landing/commit authority.
 - Record landing branch HEAD, repository instructions, dirty paths, and existing worktrees.
 - Order items by user instruction or real dependency edges; keep one active.
-- Build validation and model-routing decisions for every item.
+- Read and validate optional `.reviewed-change-orchestration.toml` overrides.
+- Build validation decisions and a complete selection record for every planned dispatch.
 
 ## Item isolation and entry
 
@@ -13,13 +14,16 @@
 - Prove the worktree location is safe and the baseline is understood.
 - Run repository-native entry reconciliation inside that worktree, never beforehand in the landing checkout; stop on contradiction or scope choice.
 - Give the implementer an absolute worktree path and no Git/lifecycle authority.
+- Include the resolved implementer selection record in its prompt.
 
 ## Review fixed point
 
 - Inspect status, changed/untracked files, diff, and implementer test evidence.
 - Give a fresh read-only reviewer requirements, diff, changed files, and raw evidence.
+- Record reviewer risk signals, overrides, effective tier, model, effort, and rationale before dispatch.
 - Require separate compliance and quality verdicts.
 - Send actionable findings to a fixer, then scoped re-review; cap at three rounds.
+- Create a new selection record for each fixer/re-review and record every fallback or escalation.
 - Inspect the final diff directly and run the canonical fixed-point gate.
 
 ## Lifecycle and commit
@@ -42,4 +46,4 @@
 
 - Run one repository-wide gate on the landing branch.
 - Confirm no intended change remains active and no owned temporary state remains.
-- Report commit order, review findings, exact evidence, residual risk, and preserved unrelated material.
+- Report commit order, model-selection records, review findings, exact evidence, residual risk, and preserved unrelated material.
