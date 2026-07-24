@@ -1,0 +1,60 @@
+{
+  "skill_name": "reviewed-change-orchestration",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Land accepted change docs/changes/normalize-cli-help. It is a tightly specified two-file wording and snapshot update. Use independent review and commit it locally, but keep total model cost proportionate.",
+      "expected_output": "The workflow routes implementation economically, creates one owned worktree from the current landing HEAD, keeps review read-only, uses a narrow fixer only if needed, creates one orchestrator-owned neutral commit, fast-forwards it, verifies the merged state, and cleans only owned state.",
+      "assertions": [
+        "Chooses the economical implementation tier for the mechanical one-to-two-file item while assigning review capability by actual risk.",
+        "Uses an owned isolated worktree and reserves staging, commit, integration, and cleanup for the orchestrator.",
+        "Requires fresh focused and final-fixed-point evidence without redundant full-suite repetition.",
+        "Uses a Conventional Commit header, keeps the body under 50 words, and includes no agent attribution anywhere in the message."
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Implement and locally commit our accepted credential-redaction migration. It crosses the scanner, report serializer, and recovery journal. I want an independent agent to attack leak and rollback paths. Preserve my untracked production-shaped fixtures and return any policy decision to me.",
+      "expected_output": "The workflow routes implementation and review to strong judgment tiers, protects unrelated fixtures, gives the reviewer no edit authority, sends defects through a bounded fixer and scoped re-review loop, escalates policy conflicts, and retains the worktree on unresolved failure.",
+      "assertions": [
+        "Routes the security and multi-file migration to strong implementer and reviewer capability rather than the cheapest model.",
+        "Keeps the reviewer read-only and sends Critical or Important findings to a fixer followed by scoped re-review.",
+        "Preserves unrelated untracked fixtures and stops for product-policy decisions or unresolved load-bearing findings."
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "The doc-contract repo has two accepted changes, parser-boundary then public-doc-refresh. Land both in that order with one commit each. The second overlaps docs touched by the first. Do not push anything.",
+      "expected_output": "The workflow processes exactly one item at a time, performs doc-contract entry/exit reconciliation and previewed transactional landing inside each item worktree, fast-forwards and cleans the first, then branches the second from the newly landed HEAD and treats overlap as reconciliation rather than an invented dependency.",
+      "assertions": [
+        "Creates each item worktree first, then runs doc-contract entry reconciliation inside it, followed later by exit reconciliation, dry-run preview, and transactional landing.",
+        "Completes commit, fast-forward integration, merged-state verification, and owned cleanup for item one before starting item two.",
+        "Starts item two from item one's landed HEAD and treats file overlap as reconciliation work rather than automatically creating a dependency edge."
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "While you are reviewing the first accepted change, main advances by one commit from another developer. Your item branch has a good reviewed commit. Finish landing it and clean up whatever you can.",
+      "expected_output": "The workflow refuses to force or merge implicitly, retains the owned worktree and branch, reconciles the moved landing baseline or replays in a newly based item worktree, and never cleans recoverable state before successful merged-state verification.",
+      "assertions": [
+        "Detects that the landing branch no longer equals the recorded item start commit and does not fast-forward blindly.",
+        "Does not reset, force-update, create an implicit merge commit, or delete the reviewed branch/worktree.",
+        "Reports recoverable state and requires reconciliation or replay from the new landing HEAD."
+      ],
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "Fix the typo in README.md and commit it.",
+      "expected_output": "The skill recognizes that the change is too small and lacks an accepted change-item/high-assurance request, so it uses or recommends the ordinary single-agent workflow rather than manufacturing worktrees and agents.",
+      "assertions": [
+        "Declines the reviewed-change orchestration ceremony for a trivial edit.",
+        "Does not manufacture independent agents, lifecycle reconciliation, or an item worktree for the typo."
+      ],
+      "files": []
+    }
+  ]
+}
