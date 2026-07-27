@@ -3,7 +3,11 @@
 ## Sequence setup
 
 - Confirm accepted status and implementation/landing/commit authority.
-- Record landing branch HEAD, repository instructions, dirty paths, and existing worktrees.
+- Record landing branch HEAD, repository instructions, staged and unstaged tracked changes, untracked paths, and existing worktrees.
+- Classify each accepted artifact as repository-managed lifecycle state or named local-only context; do not require intentionally ignored documentation to become tracked.
+- Before worktree creation, show any dirty tracked path/status list and combined diffstat, including deletions, then record explicit user permission for a separate tracked-only prerequisite checkpoint.
+- If authorized, stop on pre-existing staged additions, then use `git add -u` from the repository root, inspect the complete staged scope and diff, create the checkpoint under normal message/no-attribution rules, and record it as the new item start commit.
+- Confirm the checkpoint left untracked and ignored material untouched; if permission was denied, preserve all state and stop for a user resolution or another explicitly authorized bounded approach.
 - Order items by user instruction or real dependency edges; keep one active.
 - Read and validate optional `.reviewed-change-orchestration.toml` overrides.
 - Build validation decisions and a complete selection record for every planned dispatch.
@@ -11,8 +15,9 @@
 ## Item isolation and entry
 
 - Create one recorded owned worktree and temporary branch from current landing HEAD.
-- Prove the worktree location is safe and the baseline is understood.
-- Run repository-native entry reconciliation inside that worktree, never beforehand in the landing checkout; stop on contradiction or scope choice.
+- Prove the worktree location is safe and validate the baseline; clean tracked status alone is insufficient.
+- Copy only a named local-only change artifact when needed, keep it outside the index, and preserve its ignored or untracked policy status.
+- Run repository-native entry reconciliation inside that worktree only for repository-managed lifecycle artifacts, never beforehand in the landing checkout; stop on contradiction or scope choice.
 - Give the implementer an absolute worktree path and no Git/lifecycle authority.
 - Include the resolved implementer selection record in its prompt.
 
@@ -28,10 +33,10 @@
 
 ## Lifecycle and commit
 
-- Run exit reconciliation and inspect landing preview before transactional landing.
+- For repository-managed lifecycle artifacts, run exit reconciliation and inspect landing preview before transactional landing; skip that lifecycle for local-only artifacts.
 - Repeat only gates whose inputs lifecycle landing changed.
 - Stage explicit item paths; inspect index name-status, diff, statistics, and whitespace.
-- Create exactly one neutral commit with a Conventional Commit header and a body under 50 words.
+- Create exactly one neutral landing commit with a Conventional Commit header and a body under 50 words; do not count an explicitly authorized prerequisite checkpoint as the item's landing commit.
 - Inspect the complete message and trailers; reject any agent, AI, model, automation, generated-by, or agent `Co-authored-by` attribution.
 
 ## Integration and cleanup
@@ -46,4 +51,4 @@
 
 - Run one repository-wide gate on the landing branch.
 - Confirm no intended change remains active and no owned temporary state remains.
-- Report commit order, model-selection records, review findings, exact evidence, residual risk, and preserved unrelated material.
+- Report any prerequisite checkpoint separately, then item landing commit order, model-selection records, review findings, exact evidence, residual risk, and preserved unrelated material.

@@ -23,6 +23,37 @@ If the host already placed the session in an isolated workspace, do not create a
 
 The landing branch must be named, locally available, and at the commit recorded in the execution map. Resolve detached HEAD or an ambiguous landing target before implementation.
 
+## Resolve tracked landing-checkout changes
+
+Before selecting or creating an item worktree, distinguish staged and unstaged tracked changes from untracked and ignored material:
+
+```bash
+git status --short --untracked-files=no
+git diff --name-status
+git diff --cached --name-status
+git diff --stat
+git diff --cached --stat
+git diff HEAD --stat
+```
+
+The status and name-status views are the complete tracked/index evidence; the modified and deleted tracked paths define the checkpoint scope, and the three diffstats show the unstaged, staged, and combined results. Treat any staged addition as protected non-checkpoint material. Also record untracked paths and any named ignored change artifact as protected local material, but do not propose adding them to the checkpoint.
+
+If tracked modifications or deletions are present, stop before `git worktree add`. Show the user the tracked status and combined diffstat, state that existing implementation/commit authority does not cover these pre-existing changes, and ask for explicit permission to create a separate prerequisite checkpoint commit containing every current tracked modification and deletion. If a staged addition is present, also stop and ask the user to resolve it or authorize separate bounded index handling before any checkpoint.
+
+If permission is granted:
+
+1. Check the staged name-status for additions or other non-checkpoint material. Because `git add -u` does not remove an already staged addition, stop for user resolution or separately authorized bounded index handling if one is present.
+2. Run `git add -u` from the repository root. Do not use `git add -A`, path globs, or any command that can add untracked or ignored files.
+3. Inspect `git diff --cached --name-status`, `git diff --cached --stat`, `git diff --cached --check`, and the full staged diff as risk warrants.
+4. Confirm the index contains all and only the previously reported tracked modifications and deletions.
+5. Commit with a Conventional Commit header, a body under 50 words or no body, and no agent, AI, model, automation, generated-by, or agent `Co-authored-by` attribution.
+6. Confirm `git status --short --untracked-files=no` is empty and that recorded untracked and ignored material remains unstaged and otherwise untouched.
+7. Record the checkpoint commit as the item's new start commit.
+
+This prerequisite checkpoint is not the accepted item's landing commit. The item still receives exactly one landing commit after implementation and review.
+
+If permission is denied, retain the landing checkout unchanged and ask the user to resolve the tracked changes or explicitly authorize another bounded approach. Do not stash, discard, copy into an item worktree, or commit them implicitly.
+
 ## Select a location
 
 Use this order:
@@ -44,6 +75,8 @@ Create the branch and worktree from the exact landing HEAD:
 git worktree add -b <temporary-branch> <absolute-worktree-path> <item-start-commit>
 ```
 
+If an accepted change artifact is intentionally untracked or ignored and repository policy treats it as local-only orchestration context, copy only that named artifact into the item worktree after creation. Record it as protected local material, keep it outside the index, and do not run repository document lifecycle operations merely to make it trackable.
+
 Inside the new worktree:
 
 1. Confirm `HEAD` equals the recorded item start commit and the temporary branch is checked out.
@@ -51,7 +84,7 @@ Inside the new worktree:
 3. Run only repository-declared setup needed for this checkout; do not mutate tracked dependency or lock files incidentally.
 4. Run the cheapest meaningful clean-baseline gate.
 
-If setup or baseline fails, retain the worktree and branch. Investigate or ask whether to proceed with a known baseline failure; do not erase the evidence.
+A clean tracked status is not a passing validation baseline. If setup or baseline validation fails, retain the worktree and branch. Investigate or ask whether to proceed with a known baseline failure; do not erase the evidence.
 
 ## Integrate safely
 
