@@ -14,7 +14,7 @@ Model selection record:
 Accepted artifact reference:
 [ACCEPTED_ARTIFACT_REFERENCE]
 
-Read the accepted artifact from that reference, using the start-commit path for a tracked artifact or the supplied content hash for local-only context. Read repository instructions from the item worktree.
+Read the accepted artifact from that reference, using the start-commit path for a tracked artifact or the supplied path and verifiable content hash for local-only context. Read repository instructions from the item worktree. The supplied pointers are the stable evidence contract; any supplied diff is context only and is never the source of truth.
 
 Accepted requirements and exclusions:
 Derive these from [ACCEPTED_ARTIFACT_REFERENCE]. Orchestrator scope rulings:
@@ -48,3 +48,7 @@ Finally report checks run, exact results, and residual risks. If no findings exi
 ```
 
 An item advances only when both verdicts pass and no Critical or Important finding remains. The orchestrator resolves findings that conflict with the accepted change.
+
+## Scoped re-review dispatch
+
+Use this same template for every re-review, with `Review scope: re-review round <n>`. It must receive the current item worktree, original start commit, immutable accepted-artifact reference, protected paths, the open findings and rulings, and pointers to the fixer commands, evidence manifests, exit statuses, and logs. It derives the current diff and repository state locally; a fix diff may identify the area to inspect but is context only. Report the same separate `Requirement compliance` and `Code quality` verdicts, explicitly stating whether each open finding is resolved.

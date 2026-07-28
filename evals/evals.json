@@ -83,10 +83,10 @@
     },
     {
       "id": 8,
-      "prompt": "Review accepted change docs/changes/parser-boundary/. Give the fresh reviewer the item worktree, start commit, accepted-artifact reference, protected paths, and implementer command/log pointers. Do not paste the full diff or raw test output into its prompt.",
-      "expected_output": "The reviewer receives stable pointers and derives the actual status, diff, untracked files, and implementation locally; the orchestrator dispatches once and waits for the result.",
+      "prompt": "Land accepted change docs/changes/parser-boundary/ with independent review. Give the fresh reviewer the item worktree, start commit, accepted-artifact reference, protected paths, and implementer command/log pointers. Do not paste the full diff or raw test output into its prompt.",
+      "expected_output": "The orchestration workflow creates the item worktree and dispatches an independent read-only reviewer with stable pointers; the reviewer derives the actual status, diff, untracked files, and implementation locally, and the orchestrator dispatches once and waits for the result.",
       "assertions": [
-        "Provides the worktree, start commit, immutable accepted-artifact reference, protected paths, command exit statuses, input fingerprints, and log paths.",
+        "Provides the worktree, start commit, immutable accepted-artifact reference, protected paths, command exit statuses, covered-bytes fingerprints, normalized execution-context identity, and log paths.",
         "Does not paste a full diff or raw command output as the reviewer's source of truth.",
         "Requires the reviewer to inspect the current worktree and derive status, diff, and untracked paths independently.",
         "Does not repeatedly resend an unchanged reviewer prompt while waiting."
@@ -98,7 +98,7 @@
       "prompt": "The final fixed-point canonical gate passed in the item worktree. Exit reconciliation changed only lifecycle state, then the item was fast-forwarded without changing covered source bytes or the execution environment. Decide what to run after landing and at sequence completion.",
       "expected_output": "The workflow reuses equivalent fixed-point evidence, runs lifecycle and integration-sensitive checks, and does not repeat an unchanged expensive suite solely because HEAD moved.",
       "assertions": [
-        "Uses a covered-input and execution-context fingerprint rather than HEAD or dirty status alone to decide reuse.",
+        "Uses covered bytes, dependency identity, mutable external inputs, and normalized execution context rather than HEAD, dirty status, or absolute worktree path alone to decide reuse.",
         "Runs lifecycle checks after landing and reruns checks whose inputs could differ in the landing checkout.",
         "Does not claim a full gate passed from focused evidence or rerun an unchanged expensive suite ceremonially."
       ],
@@ -127,6 +127,41 @@
         "Generates deterministic sanitized names from repository, item, and start-commit identity.",
         "Treats an existing exact path as recovery or collision and never overwrites or silently selects another path.",
         "Does not edit .git/info/exclude or .gitignore to accommodate the worktree."
+      ],
+      "files": []
+    },
+    {
+      "id": 12,
+      "prompt": "Land an accepted item from a linked worktree containing initialized and uninitialized submodules. One initialized submodule is dirty, one has declared generated artifacts, and another contains a nested submodule. Git uses shared worktree configuration. Clean up after integration without changing the landing checkout.",
+      "expected_output": "The workflow snapshots and preserves landing-checkout submodule configuration and status, retains the recovery worktree for dirty or undeclared parent/nested residue, permits only explicitly declared generated artifacts under their bounded owned paths, and never deinitializes shared configuration.",
+      "assertions": [
+        "Requires a local two-worktree probe covering initialized, uninitialized, dirty, generated-artifact, nested-submodule, and shared-configuration states before relying on cleanup behavior.",
+        "Compares landing checkout configuration, status, and recursive submodule commits before and after cleanup and stops on any change.",
+        "Uses the literal `git config --local --get-regexp '^submodule\\.'` snapshot expression, which matches ordinary `submodule.<name>.*` keys.",
+        "Does not run linked-worktree submodule deinitialization unless it proves the exact configuration is worktree-local; never force-deinitializes.",
+        "Retains the worktree for undeclared parent or nested-submodule residue and permits forced worktree removal only after every residue category is absent or declared bounded item-owned output."
+      ],
+      "files": []
+    },
+    {
+      "id": 13,
+      "prompt": "Create an item worktree below a configured root where an existing generated-path ancestor is a symlink. Then retry with a normal root but an existing exact generated path, and finally with an existing temporary branch name.",
+      "expected_output": "The workflow rejects each unsafe or colliding case without creating a worktree or choosing an alternate path or branch identity.",
+      "assertions": [
+        "Checks existing ancestors through the configured root for symlink, non-directory, inaccessible, or repository collisions, then checks generated descendants at or below the canonical root for symlink traversal or canonical escape.",
+        "Creates missing deterministic buckets one component at a time and rechecks their physical paths and containment beneath the canonical root.",
+        "Treats existing exact paths, dangling symlinks, and local or remote-tracking temporary branch names as recovery or ownership collisions."
+      ],
+      "files": []
+    },
+    {
+      "id": 14,
+      "prompt": "An accepted item has one Important finding. Dispatch a fixer and a scoped re-review, then decide whether to reuse a gate after fast-forward when covered bytes match but a dependency version, mutable external input, or normalized execution context differs.",
+      "expected_output": "The scoped re-review receives immutable artifact and evidence pointers plus the open finding, derives current state locally, reports separate compliance and quality verdicts, and reruns every affected gate when any evidence-identity component differs.",
+      "assertions": [
+        "Provides the current worktree, original start commit, immutable accepted-artifact reference, protected paths, open findings/rulings, and fixer command/evidence/exit-status/log pointers; a fix diff is context only.",
+        "Requires separate Requirement compliance and Code quality verdicts and explicit disposition of each open finding.",
+        "Rejects evidence reuse when covered bytes, dependency identity, mutable external inputs, command/relative working directory, or normalized execution context differ, while treating absolute paths and Git provenance as audit pointers rather than reusable state identity."
       ],
       "files": []
     }

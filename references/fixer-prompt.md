@@ -28,8 +28,8 @@ Run affected focused validation:
 Report:
 - finding-by-finding disposition;
 - files changed;
-- commands run with exact pass/fail results, covered-input fingerprints, and log paths;
+- commands run with exact pass/fail results, covered-bytes manifests/fingerprints, exact command, relative working directory plus recorded absolute audit pointer, normalized execution context, dependency and mutable-external-input identity, and log paths;
 - any finding still open or requiring a product/architecture decision.
 ```
 
-After every fix dispatch, send only the fix diff and open findings to a read-only scoped re-review. Do not accept the fixer's own clearance as closure.
+After every fix dispatch, send a read-only scoped re-review the current item-worktree path, original start commit, immutable accepted-artifact reference, protected paths, open findings/rulings, and fixer command/evidence/exit-status/log pointers. A fix diff may be supplied only as context; the reviewer derives the current state locally and separately reports compliance and quality verdicts. Do not accept the fixer's own clearance as closure.

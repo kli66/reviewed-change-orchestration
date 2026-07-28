@@ -27,7 +27,7 @@ A config override may raise capability. It may request a lower tier, but it cann
 
 Reject the config before dispatch when TOML is invalid, `schema_version` is not `1`, a tier/role/effort value is unsupported, a worktree root is invalid, or an unknown key could hide a typo. If a configured model is unavailable, select a same-or-higher-tier available model and record the fallback; stop if no adequate model exists.
 
-The optional `[worktree].root` setting is resolved by the lifecycle policy, with `~/worktrees` as the default. Expand `~` using the invoking user's home directory, require an absolute path outside the target repository, and reject inaccessible, symlink-ambiguous, or repository-local roots before creating a worktree.
+The optional `[worktree].root` setting is resolved by the lifecycle policy, with `~/worktrees` as the default. Expand `~` using the invoking user's home directory, require an absolute path outside the target repository, and reject inaccessible, repository-local, symlinked, or canonically ambiguous roots before creating a worktree. The lifecycle policy also validates every existing generated-path ancestor and branch identity.
 
 ## Record every selection
 

@@ -39,7 +39,7 @@ For each item, record:
 - accepted-artifact policy: repository-managed lifecycle state or named local-only context;
 - owned files, expected durable-document mutations, and later overlaps;
 - focused checks, canonical repository gate, and any live verification;
-- validation evidence records: covered-input fingerprint, command, working directory, relevant environment/toolchain identity, exit status, and log path;
+- validation evidence records: covered-bytes manifest and fingerprint; exact command; relative working directory plus recorded absolute working-directory audit pointer; normalized repository/worktree execution context; dependency and mutable-external-input identity; exit status; and log path;
 - worktree and temporary branch names;
 - one model-selection record per planned dispatch, updated before any retry or escalation;
 - Conventional Commit header (`type(scope): description`, omitting scope when unnecessary) and a body under 50 words for any authorized prerequisite checkpoint and for the item landing commit;
@@ -63,7 +63,7 @@ If permission is denied, preserve the landing checkout exactly and ask the user 
 
 Follow `references/worktree-lifecycle.md`. Create the item branch from the current landing HEAD, not the sequence's original baseline. Prefer a host-managed isolation mechanism when it exposes ownership and cleanup; otherwise resolve the configured worktree root, defaulting to `~/worktrees`.
 
-Run a suitable clean-baseline check inside the item worktree. A clean Git status proves only isolation, not baseline correctness. Stop for an ambiguous or failing validation baseline unless the failure is understood and the user authorizes proceeding. Record the exact baseline evidence.
+Before `git worktree add`, enforce the lifecycle containment contract: canonicalize the configured root and every existing generated-path ancestor, reject symlink traversal and exact path or branch collisions, and create missing deterministic buckets safely. Run a suitable clean-baseline check inside the item worktree. A clean Git status proves only isolation, not baseline correctness. Stop for an ambiguous or failing validation baseline unless the failure is understood and the user authorizes proceeding. Record the exact baseline evidence.
 
 If the accepted artifact is named local-only orchestration context, copy only that artifact into the item worktree when needed and keep it untracked or ignored according to repository policy. Do not stage or land it.
 
@@ -89,7 +89,7 @@ Resolve and record an independent reviewer selection, then instantiate `referenc
 - the item start commit and absolute worktree path;
 - the accepted artifact and its immutable reference (the start-commit path for tracked artifacts, or a path and content hash for local-only context);
 - protected unrelated paths;
-- implementer command lines, exit statuses, covered-input fingerprints, and log paths.
+- implementer exact commands, covered-bytes manifests/fingerprints, relative working directories, recorded absolute working-directory audit pointers, normalized contexts, dependency and mutable-external-input identities, exit statuses, and log paths.
 
 The reviewer derives current status, the start-to-current diff, changed and untracked files, implementation, and tests locally. Do not paste the full diff or raw command output into the prompt.
 
@@ -102,7 +102,7 @@ Critical or Important findings, failed compliance, or a confirmed acceptance gap
 1. Adjudicate any finding that conflicts with accepted scope. Do not silently redesign the item.
 2. Instantiate `references/fixer-prompt.md` for the original implementer or a separate fixer.
 3. Run affected focused checks.
-4. Dispatch a scoped read-only re-review of the fixes and open findings.
+4. Dispatch a scoped read-only re-review with the current worktree, original start commit, immutable accepted-artifact reference, protected paths, open findings, and fixer command/evidence/exit-status/log pointers. A supplied fix diff is context only, never its source of truth.
 
 Create a fresh selection record for every fixer and re-review dispatch. Use at most three fix rounds. After two materially unsuccessful attempts, increase model capability or change the task framing instead of repeating the same dispatch, and record the escalation. If a load-bearing finding remains after the third round, retain the worktree and branch and stop for user direction.
 
@@ -138,7 +138,7 @@ Do not push, create a PR, deploy, or mutate remote branches without separate aut
 
 ### 10. Integrate, verify, and clean up
 
-Follow `references/worktree-lifecycle.md`. Confirm the landing branch has not moved from the item's recorded start commit, then fast-forward it to the item commit. Never resolve divergence by force, reset, or an implicit merge commit.
+Follow `references/worktree-lifecycle.md`. Confirm the landing branch has not moved from the item's recorded start commit, then fast-forward it to the item commit. Never resolve divergence by force, reset, or an implicit merge commit. Before cleanup, classify all parent and nested-submodule residue and snapshot landing-checkout submodule configuration/status; linked-worktree cleanup must not deinitialize shared landing configuration.
 
 Verify the merged state before cleanup. Preserve the item worktree and branch on any integration or verification failure. Remove only the worktree this workflow created, then delete its fully merged temporary branch. Cleanup success is the gate that permits the next item to start.
 
@@ -146,7 +146,7 @@ Verify the merged state before cleanup. Preserve the item worktree and branch on
 
 After the final item:
 
-1. Run one repository-wide canonical gate on the landing branch, or reuse the final fixed-point evidence only when the validation policy proves covered-input and execution-context equivalence after fast-forward.
+1. Run one repository-wide canonical gate on the landing branch, or reuse final fixed-point evidence only when the validation policy proves equivalent covered bytes, command, relative working directory, normalized execution context, dependency identity, and mutable external inputs after fast-forward; absolute paths and Git provenance remain audit pointers.
 2. Confirm all intended lifecycle items landed and no owned worktree or temporary branch remains.
 3. Report any prerequisite checkpoint separately, then item landing commits in order, review-found defects, exact validation evidence, residual findings, and unrelated material left untouched.
 4. Report model-selection records in dispatch order, including overrides, fallbacks, and escalations.

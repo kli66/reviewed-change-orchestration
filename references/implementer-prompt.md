@@ -34,7 +34,7 @@ Report:
 - files changed;
 - implementation or API decisions;
 - deviations, ambiguities, or descoped criteria;
-- commands run with exact pass/fail results, covered-input fingerprints, and log paths;
+- commands run with exact pass/fail results, covered-bytes manifests/fingerprints, exact command, relative working directory plus recorded absolute audit pointer, normalized execution context, dependency and mutable-external-input identity, and log paths;
 - validation that could not be performed.
 ```
 

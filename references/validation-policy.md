@@ -22,13 +22,14 @@ The read-only reviewer inspects requirements, actual diff, changed and untracked
 
 Record each validation command with:
 
-- a covered-input fingerprint for tracked changes, index state, and untracked files the command can read; include ignored or generated inputs when they are part of that command's scope;
-- the exact command and working directory;
-- relevant dependency, toolchain, and environment identity;
+- a covered-bytes manifest and fingerprint for tracked changes, index state, and untracked files the command can read; include ignored or generated inputs when they are part of that command's scope;
+- the exact command, relative working directory, and recorded absolute working-directory audit pointer;
+- normalized execution context: canonical repository identity from the common Git directory, relative working directory, command argv, relevant environment keys/values, platform, and toolchain identity, not the absolute item or landing worktree path;
+- dependency identity (lockfiles plus resolved dependency/tool versions) and every mutable external input read by the command, or an explicit declaration that no mutable external input is read;
 - exit status and an external log path; and
 - Git provenance (`HEAD`, branch, and dirty-status summary) for reporting.
 
-Git provenance is not the reusable state identity: the same bytes can be dirty before a commit and clean after a fast-forward. Reuse evidence only when the command, working directory, execution context, covered-input fingerprint, and dependency state are equivalent. If the command reads an unknown external or mutable input, treat its evidence as non-reusable. A reviewer reproduction is independent evidence and should not be skipped merely because an implementer command has a reusable record.
+Git provenance is not the reusable state identity: the same bytes can be dirty before a commit and clean after a fast-forward. Recorded absolute paths are audit pointers only. Reuse evidence only when the command, covered bytes, relative working directory, normalized execution context, dependency identity, and mutable external inputs are equivalent. A difference reruns the affected gate; unknown external or mutable input makes evidence non-reusable. A reviewer reproduction is independent evidence and should not be skipped merely because an implementer command has a reusable record.
 
 ## Final fixed-point gate
 
@@ -47,7 +48,7 @@ After fast-forward integration and before cleanup, prove:
 
 Do not automatically rerun an unchanged expensive suite solely because the commit moved by fast-forward. Run the checks whose evidence could have changed at integration.
 
-After all items, run one repository-wide canonical gate on the landing branch unless the final fixed-point evidence has an equivalent covered-input and execution-context fingerprint after landing. In that case, reuse the evidence and still run merged-state and lifecycle checks whose inputs can differ at integration.
+After all items, run one repository-wide canonical gate on the landing branch unless final fixed-point evidence has equivalent covered bytes, command, relative working directory, normalized execution context, dependency identity, and mutable external inputs after landing. In that case, reuse the evidence and still run merged-state and lifecycle checks whose inputs can differ at integration.
 
 ## Report boundaries honestly
 

@@ -3,8 +3,9 @@
 schema_version = 1
 
 # Worktrees default to ~/worktrees. Override only when this repository needs a
-# different absolute location after ~ expansion; repository-local roots are not
-# allowed.
+# different absolute location after ~ expansion; repository-local, symlinked,
+# or canonically ambiguous roots are not allowed. Every existing generated-path
+# ancestor is also validated before creation.
 [worktree]
 # root = "~/worktrees"
 
