@@ -14,7 +14,7 @@ Map tiers to models available in the current host. Do not bake versioned model I
 
 ## Resolve overrides
 
-Look for `.reviewed-change-orchestration.toml` at the target repository root before building the execution map. The file is optional; do not create or modify it unless the user asks. See `routing-config.example.toml` for the supported schema.
+Look for `.reviewed-change-orchestration.toml` at the target repository root before building the execution map. The file is optional; do not create or modify it unless the user asks. See `routing-config.example.toml` for the supported routing and worktree schema.
 
 Apply routing inputs in this order:
 
@@ -25,7 +25,9 @@ Apply routing inputs in this order:
 
 A config override may raise capability. It may request a lower tier, but it cannot silently weaken the policy floor: record the conflict and keep the policy tier. A role-specific `model` or `effort` requires an explicit non-`auto` role tier so its capability can be compared with the floor. An explicit user request to accept the lower tier governs after the orchestrator states the concrete risk. Reviewer independence and risk floors matter more than uniform model choice.
 
-Reject the config before dispatch when TOML is invalid, `schema_version` is not `1`, a tier/role/effort value is unsupported, or an unknown key could hide a typo. If a configured model is unavailable, select a same-or-higher-tier available model and record the fallback; stop if no adequate model exists.
+Reject the config before dispatch when TOML is invalid, `schema_version` is not `1`, a tier/role/effort value is unsupported, a worktree root is invalid, or an unknown key could hide a typo. If a configured model is unavailable, select a same-or-higher-tier available model and record the fallback; stop if no adequate model exists.
+
+The optional `[worktree].root` setting is resolved by the lifecycle policy, with `~/worktrees` as the default. Expand `~` using the invoking user's home directory, require an absolute path outside the target repository, and reject inaccessible, symlink-ambiguous, or repository-local roots before creating a worktree.
 
 ## Record every selection
 

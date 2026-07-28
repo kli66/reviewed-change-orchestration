@@ -20,7 +20,7 @@ Open findings and orchestrator rulings:
 
 Read the current implementation and tests before editing. Make the smallest changes that resolve the findings without expanding accepted scope. Add or improve regression coverage where the harness supports it.
 
-Do not stage, commit, merge, land, archive, create/delete branches or worktrees, edit the landing checkout, or alter unrelated material.
+Do not stage, commit, merge, land, archive, create/delete branches or worktrees, edit the landing checkout, or alter unrelated material. In submodules, build, test, compile, and explicitly declared artifact-generation commands are allowed, but do not commit, amend, checkout, switch, reset, rebase, merge, cherry-pick, update the index, change the checked-out commit, or update a superproject gitlink without exact user approval. Stop and report any unapproved submodule repository-state change.
 
 Run affected focused validation:
 [FOCUSED_VALIDATION]
@@ -28,7 +28,7 @@ Run affected focused validation:
 Report:
 - finding-by-finding disposition;
 - files changed;
-- commands run with exact pass/fail results;
+- commands run with exact pass/fail results, covered-input fingerprints, and log paths;
 - any finding still open or requiring a product/architecture decision.
 ```
 

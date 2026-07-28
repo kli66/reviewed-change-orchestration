@@ -24,7 +24,7 @@ Protected unrelated paths:
 
 Implement the accepted behavior at its real contract boundary. Preserve behavior outside scope. Add focused acceptance coverage. When fixing a reproducible defect and the harness supports it, demonstrate that the regression test fails without the fix and passes with it.
 
-You may edit only in-scope code, tests, and documentation inside the named worktree. Do not stage, commit, merge, land, archive, create/delete branches or worktrees, edit the landing checkout, or alter unrelated material.
+You may edit only in-scope code, tests, and documentation inside the named worktree. Do not stage, commit, merge, land, archive, create/delete branches or worktrees, edit the landing checkout, or alter unrelated material. In submodules, build, test, compile, and explicitly declared artifact-generation commands are allowed, but do not commit, amend, checkout, switch, reset, rebase, merge, cherry-pick, update the index, change the checked-out commit, or update a superproject gitlink without exact user approval. Stop and report any unapproved submodule repository-state change.
 
 Run focused validation:
 [FOCUSED_VALIDATION]
@@ -34,7 +34,7 @@ Report:
 - files changed;
 - implementation or API decisions;
 - deviations, ambiguities, or descoped criteria;
-- commands run with exact pass/fail results;
+- commands run with exact pass/fail results, covered-input fingerprints, and log paths;
 - validation that could not be performed.
 ```
 

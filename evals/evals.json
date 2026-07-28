@@ -80,6 +80,55 @@
         "Keeps the intentionally ignored accepted artifact as named local-only orchestration context without requiring it to become tracked or invoking doc-contract lifecycle operations unless repository policy manages it through doc-contract."
       ],
       "files": []
+    },
+    {
+      "id": 8,
+      "prompt": "Review accepted change docs/changes/parser-boundary/. Give the fresh reviewer the item worktree, start commit, accepted-artifact reference, protected paths, and implementer command/log pointers. Do not paste the full diff or raw test output into its prompt.",
+      "expected_output": "The reviewer receives stable pointers and derives the actual status, diff, untracked files, and implementation locally; the orchestrator dispatches once and waits for the result.",
+      "assertions": [
+        "Provides the worktree, start commit, immutable accepted-artifact reference, protected paths, command exit statuses, input fingerprints, and log paths.",
+        "Does not paste a full diff or raw command output as the reviewer's source of truth.",
+        "Requires the reviewer to inspect the current worktree and derive status, diff, and untracked paths independently.",
+        "Does not repeatedly resend an unchanged reviewer prompt while waiting."
+      ],
+      "files": []
+    },
+    {
+      "id": 9,
+      "prompt": "The final fixed-point canonical gate passed in the item worktree. Exit reconciliation changed only lifecycle state, then the item was fast-forwarded without changing covered source bytes or the execution environment. Decide what to run after landing and at sequence completion.",
+      "expected_output": "The workflow reuses equivalent fixed-point evidence, runs lifecycle and integration-sensitive checks, and does not repeat an unchanged expensive suite solely because HEAD moved.",
+      "assertions": [
+        "Uses a covered-input and execution-context fingerprint rather than HEAD or dirty status alone to decide reuse.",
+        "Runs lifecycle checks after landing and reruns checks whose inputs could differ in the landing checkout.",
+        "Does not claim a full gate passed from focused evidence or rerun an unchanged expensive suite ceremonially."
+      ],
+      "files": []
+    },
+    {
+      "id": 10,
+      "prompt": "The accepted item has an initialized submodule. Its declared build creates ignored artifacts, then an implementer tries to switch the submodule to another commit and update the superproject gitlink. Continue only within the allowed authority.",
+      "expected_output": "The workflow permits the declared build output, records the submodule baseline, and stops for explicit approval of the submodule checkout and gitlink change while preserving recoverable state.",
+      "assertions": [
+        "Allows declared build, test, compile, and artifact-generation output without treating it as approval to change repository state.",
+        "Requires exact user approval for the submodule checkout and superproject gitlink update.",
+        "Does not stage or land the submodule change without that approval.",
+        "Uses forced worktree removal only after clean or declared-generated submodule residue is proven and never as a way to discard unapproved changes.",
+        "Retains the worktree and branch if the approval boundary is crossed or residue is ambiguous."
+      ],
+      "files": []
+    },
+    {
+      "id": 11,
+      "prompt": "Create an item worktree with no repository-specific location override, then create another using [worktree].root = \"~/custom-worktrees\". The default and override must remain outside the target repository, and an existing exact generated path must not be overwritten.",
+      "expected_output": "The workflow uses ~/worktrees by default, expands and validates the configured root, generates deterministic repository/item/start names, and stops on an ownership collision.",
+      "assertions": [
+        "Uses ~/worktrees when no override is configured and the configured root when one is valid.",
+        "Rejects repository-local, inaccessible, or symlink-ambiguous roots before worktree creation.",
+        "Generates deterministic sanitized names from repository, item, and start-commit identity.",
+        "Treats an existing exact path as recovery or collision and never overwrites or silently selects another path.",
+        "Does not edit .git/info/exclude or .gitignore to accommodate the worktree."
+      ],
+      "files": []
     }
   ]
 }

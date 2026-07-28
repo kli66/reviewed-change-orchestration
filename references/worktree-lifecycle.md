@@ -19,7 +19,7 @@ git worktree list --porcelain
 
 Different Git and common directories normally indicate a linked worktree, but a submodule also has distinct metadata. Use `--show-superproject-working-tree` to distinguish them.
 
-If the host already placed the session in an isolated workspace, do not create a nested worktree blindly. Prefer the host's native isolation mechanism when it can create an item workspace and provides clear ownership/cleanup. Otherwise create a sibling Git worktree from the common repository while leaving the host-managed workspace untouched. Never designate an externally managed workspace as owned cleanup material.
+If the host already placed the session in an isolated workspace, do not create a nested worktree blindly. Prefer the host's native isolation mechanism when it can create an item workspace and provides clear ownership/cleanup. Otherwise use the configured worktree root, defaulting to `~/worktrees`, while leaving the host-managed workspace untouched. Never designate an externally managed workspace as owned cleanup material.
 
 The landing branch must be named, locally available, and at the commit recorded in the execution map. Resolve detached HEAD or an ambiguous landing target before implementation.
 
@@ -54,18 +54,29 @@ This prerequisite checkpoint is not the accepted item's landing commit. The item
 
 If permission is denied, retain the landing checkout unchanged and ask the user to resolve the tracked changes or explicitly authorize another bounded approach. Do not stash, discard, copy into an item worktree, or commit them implicitly.
 
+## Enforce submodule boundaries
+
+Record initialized submodules recursively before implementation and after each delegated command:
+
+```bash
+git submodule status --recursive
+git submodule foreach --recursive 'git rev-parse HEAD && git status --short --untracked-files=all'
+```
+
+Build, test, compile, and explicitly declared artifact-generation commands may create or update their expected filesystem outputs inside a submodule. They do not authorize repository-state changes. Require the user's explicit approval for the exact submodule path and operation before allowing a commit or amend, checkout or switch, reset, rebase, merge, cherry-pick, index update, checked-out commit change, or superproject gitlink change. A blanket approval is insufficient.
+
+Treat any unapproved tracked change, undeclared untracked residue, changed submodule `HEAD`, or changed superproject gitlink as a stop condition. Do not stage or land submodule changes under the item unless the approved scope explicitly includes that exact operation. Preserve the worktree and branch for recovery when the boundary is crossed.
+
 ## Select a location
 
-Use this order:
+Use this order after the host-managed-workspace check:
 
-1. An applicable repository or user instruction declaring a worktree location.
-2. An existing project-local `.worktrees/` directory.
-3. An existing project-local `worktrees/` directory.
-4. A project-local `.worktrees/` directory.
+1. `[worktree].root` in `<target-repo>/.reviewed-change-orchestration.toml`.
+2. `~/worktrees`.
 
-For a project-local location, prove it is ignored with `git check-ignore`. Do not place a worktree there until the check succeeds. Do not slip a `.gitignore` edit into an accepted item's commit; establish the ignored location separately or stop for direction.
+Expand `~` using the invoking user's home directory and require an absolute root outside the target repository and its existing managed worktrees. Reject invalid, inaccessible, symlink-ambiguous, or repository-local roots before worktree creation. Do not modify `.git/info/exclude` or `.gitignore` to make the root acceptable.
 
-Choose collision-resistant temporary names, for example `rco/<item-slug>-<short-start-commit>` and `.worktrees/<item-slug>-<short-start-commit>`. Record the branch, absolute path, start commit, and creation mechanism. This record defines what the workflow owns.
+Generate a deterministic, sanitized path as `<worktree-root>/<repo-slug>-<repo-id>/<item-slug>-<short-start-commit>`, where `repo-id` is a short stable identifier derived from the canonical Git common directory. Use `rco/<item-slug>-<short-start-commit>` for the temporary branch. If the exact path already exists, treat it as a recovery or ownership collision and stop; never overwrite it or silently select another path. Record the branch, absolute path, start commit, root source, and creation mechanism. This record defines what the workflow owns.
 
 ## Create and establish a baseline
 
@@ -81,7 +92,7 @@ Inside the new worktree:
 
 1. Confirm `HEAD` equals the recorded item start commit and the temporary branch is checked out.
 2. Confirm tracked status is clean.
-3. Run only repository-declared setup needed for this checkout; do not mutate tracked dependency or lock files incidentally.
+3. Confirm the recorded submodule baseline and run only repository-declared setup needed for this checkout; do not mutate tracked dependency or lock files or submodule repository state incidentally.
 4. Run the cheapest meaningful clean-baseline gate.
 
 A clean tracked status is not a passing validation baseline. If setup or baseline validation fails, retain the worktree and branch. Investigate or ask whether to proceed with a known baseline failure; do not erase the evidence.
@@ -109,9 +120,10 @@ Do not use reset, force-update, an implicit merge commit, or conflict resolution
 Cleanup is allowed only after merged-state verification passes:
 
 1. Confirm the recorded worktree path is still registered to the recorded temporary branch.
-2. Confirm it has no tracked or untracked item residue that would be lost.
-3. Run `git worktree remove <absolute-worktree-path>` from outside that worktree.
-4. Confirm the item commit is reachable from the landing branch, then run `git branch -d <temporary-branch>`.
-5. Confirm both the registration and branch are gone.
+2. Confirm the item commit is reachable from the landing branch and that no unapproved submodule repository-state change or residue exists. Declared generated artifacts are owned disposable residue; tracked changes and undeclared files are not.
+3. Deinitialize only clean or declared-generated submodules without forcing deinitialization.
+4. From outside the worktree, run `git worktree remove <absolute-worktree-path>`. When Git requires force solely because the worktree contains a submodule, use one `git worktree remove --force` after the preceding assertions; never use force to discard unapproved material or bypass a lock.
+5. Confirm the item commit is reachable from the landing branch, then run `git branch -d <temporary-branch>`.
+6. Confirm both the registration and branch are gone.
 
-Do not use forced removal or `git branch -D` in this workflow. Never prune or remove unrelated or externally managed worktrees. On any failed assertion, preserve the branch and worktree and report their exact recovery coordinates.
+Never use `git branch -D`, force deinitialization, or forced removal when any assertion is ambiguous. Never prune or remove unrelated or externally managed worktrees. On any failed assertion, preserve the branch and worktree and report their exact recovery coordinates.

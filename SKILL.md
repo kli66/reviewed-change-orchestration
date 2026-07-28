@@ -25,7 +25,7 @@ Use this workflow only when independent review and isolation justify their cost.
 Read these files before the corresponding phase:
 
 - `references/worktree-lifecycle.md` before creating, integrating, or removing an item worktree.
-- `references/model-routing.md` before every implementer, reviewer, fixer, or re-review dispatch. It defines selection records and optional `.reviewed-change-orchestration.toml` overrides.
+- `references/model-routing.md` before every implementer, reviewer, fixer, or re-review dispatch. It defines selection records and optional `.reviewed-change-orchestration.toml` routing/worktree overrides.
 - `references/validation-policy.md` while building the execution map and before claiming a boundary is complete.
 - `references/orchestrator-checklist.md` throughout each item.
 - The applicable role prompt before delegating implementation, review, or fixes.
@@ -39,6 +39,7 @@ For each item, record:
 - accepted-artifact policy: repository-managed lifecycle state or named local-only context;
 - owned files, expected durable-document mutations, and later overlaps;
 - focused checks, canonical repository gate, and any live verification;
+- validation evidence records: covered-input fingerprint, command, working directory, relevant environment/toolchain identity, exit status, and log path;
 - worktree and temporary branch names;
 - one model-selection record per planned dispatch, updated before any retry or escalation;
 - Conventional Commit header (`type(scope): description`, omitting scope when unnecessary) and a body under 50 words for any authorized prerequisite checkpoint and for the item landing commit;
@@ -60,7 +61,7 @@ If permission is denied, preserve the landing checkout exactly and ask the user 
 
 ### 2. Create an owned worktree
 
-Follow `references/worktree-lifecycle.md`. Create the item branch from the current landing HEAD, not the sequence's original baseline. Prefer a host-native isolation mechanism when it exposes ownership and cleanup; otherwise use an ignored repository-local worktree directory.
+Follow `references/worktree-lifecycle.md`. Create the item branch from the current landing HEAD, not the sequence's original baseline. Prefer a host-managed isolation mechanism when it exposes ownership and cleanup; otherwise resolve the configured worktree root, defaulting to `~/worktrees`.
 
 Run a suitable clean-baseline check inside the item worktree. A clean Git status proves only isolation, not baseline correctness. Stop for an ambiguous or failing validation baseline unless the failure is understood and the user authorizes proceeding. Record the exact baseline evidence.
 
@@ -82,12 +83,15 @@ Inspect the resulting status, changed files, diff, and test evidence yourself. A
 
 ### 5. Obtain independent review
 
-Resolve and record an independent reviewer selection, then instantiate `references/reviewer-prompt.md` for a fresh-context, read-only reviewer. Give it:
+Resolve and record an independent reviewer selection, then instantiate `references/reviewer-prompt.md` for a fresh-context, read-only reviewer. Dispatch once and wait for completion or a meaningful reviewer message; do not repeatedly resend an unchanged prompt. Give it pointers to:
 
-- the accepted requirements and exclusions;
+- the accepted-artifact pointer from which requirements and exclusions are derived;
 - the item start commit and absolute worktree path;
-- current status, changed-file list, actual diff, and untracked-file paths;
-- implementer test commands and raw results, without the implementer's confidence narrative.
+- the accepted artifact and its immutable reference (the start-commit path for tracked artifacts, or a path and content hash for local-only context);
+- protected unrelated paths;
+- implementer command lines, exit statuses, covered-input fingerprints, and log paths.
+
+The reviewer derives current status, the start-to-current diff, changed and untracked files, implementation, and tests locally. Do not paste the full diff or raw command output into the prompt.
 
 Require separate requirement-compliance and code-quality verdicts. The reviewer may inspect and run non-destructive checks, but may not edit files or perform lifecycle or Git mutations.
 
@@ -106,7 +110,7 @@ Record Minor findings explicitly; fix them when low-risk and in scope, otherwise
 
 ### 7. Reach the final fixed point
 
-The orchestrator inspects all source, tests, public documentation, untracked additions, and lifecycle mutations. Run the canonical repository gate now, after the final code change. Fresh evidence must describe this exact worktree state.
+The orchestrator inspects all source, tests, public documentation, untracked additions, and lifecycle mutations. Run the canonical repository gate now, after the final code change. Record fresh evidence for this exact worktree state using the validation evidence format; `HEAD` and dirty status are provenance, not the reusable state identity.
 
 For a reproducible defect, add a regression test first when the repository has a useful seam and prove it fails without the fix. Do not impose test-first work where no meaningful harness exists.
 
@@ -142,7 +146,7 @@ Verify the merged state before cleanup. Preserve the item worktree and branch on
 
 After the final item:
 
-1. Run one repository-wide canonical gate on the landing branch.
+1. Run one repository-wide canonical gate on the landing branch, or reuse the final fixed-point evidence only when the validation policy proves covered-input and execution-context equivalence after fast-forward.
 2. Confirm all intended lifecycle items landed and no owned worktree or temporary branch remains.
 3. Report any prerequisite checkpoint separately, then item landing commits in order, review-found defects, exact validation evidence, residual findings, and unrelated material left untouched.
 4. Report model-selection records in dispatch order, including overrides, fallbacks, and escalations.

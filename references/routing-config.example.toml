@@ -1,6 +1,12 @@
 # Copy to <target-repo>/.reviewed-change-orchestration.toml only when
-# repository-local manual routing overrides are needed.
+# repository-local routing or worktree overrides are needed.
 schema_version = 1
+
+# Worktrees default to ~/worktrees. Override only when this repository needs a
+# different absolute location after ~ expansion; repository-local roots are not
+# allowed.
+[worktree]
+# root = "~/worktrees"
 
 # Map portable tiers to model IDs and effort values exposed by the host.
 # Omit any field that should remain auto-resolved.

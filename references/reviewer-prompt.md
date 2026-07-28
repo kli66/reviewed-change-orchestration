@@ -11,22 +11,28 @@ Start commit: [ITEM_START_COMMIT]
 Model selection record:
 [MODEL_SELECTION_RECORD]
 
-Read the accepted artifact, repository instructions, current status, changed and untracked files, actual diff, implementation, and tests.
+Accepted artifact reference:
+[ACCEPTED_ARTIFACT_REFERENCE]
+
+Read the accepted artifact from that reference, using the start-commit path for a tracked artifact or the supplied content hash for local-only context. Read repository instructions from the item worktree.
 
 Accepted requirements and exclusions:
-[REQUIREMENTS_AND_EXCLUSIONS]
+Derive these from [ACCEPTED_ARTIFACT_REFERENCE]. Orchestrator scope rulings:
+[SCOPE_RULINGS]
 
 Relevant invariants and current baseline:
 [INVARIANTS_AND_BASELINE]
 
-Changed-surface evidence:
-[STATUS_DIFF_AND_CHANGED_FILES]
+Evidence manifest:
+[EVIDENCE_MANIFEST]
 
-Implementer test evidence:
-[COMMANDS_AND_RAW_RESULTS]
+Command and log pointers:
+[COMMANDS_EXIT_STATUSES_AND_LOG_PATHS]
 
 Protected unrelated paths:
 [DO_NOT_TOUCH]
+
+Before judging the implementation, derive the current state locally. At minimum inspect `git status --short --untracked-files=all`, the tracked diff from `[ITEM_START_COMMIT]`, the untracked paths, the accepted artifact, all changed files, and the tests. If submodules are present, compare their current commits and status with the recorded baseline and do not change their Git state. Use the command and log pointers to verify implementer evidence; do not treat a pointer or an agent report as proof without inspecting the worktree.
 
 Review adversarially for requirement compliance and code quality. Check correctness, failure behavior, compatibility, security, atomicity or concurrency where relevant, diagnostics, test quality, public documentation, and scope control. Reproduce risky paths when useful.
 

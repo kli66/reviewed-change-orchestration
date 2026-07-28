@@ -18,9 +18,21 @@ For a reproducible defect with a useful seam, prove regression coverage by obser
 
 The read-only reviewer inspects requirements, actual diff, changed and untracked files, tests, and implementer results. It may run focused reproductions or non-destructive checks, especially for risky failure paths. Its primary independent value is judgment, not ceremonial repetition of an unchanged full suite.
 
+## Evidence identity and reuse
+
+Record each validation command with:
+
+- a covered-input fingerprint for tracked changes, index state, and untracked files the command can read; include ignored or generated inputs when they are part of that command's scope;
+- the exact command and working directory;
+- relevant dependency, toolchain, and environment identity;
+- exit status and an external log path; and
+- Git provenance (`HEAD`, branch, and dirty-status summary) for reporting.
+
+Git provenance is not the reusable state identity: the same bytes can be dirty before a commit and clean after a fast-forward. Reuse evidence only when the command, working directory, execution context, covered-input fingerprint, and dependency state are equivalent. If the command reads an unknown external or mutable input, treat its evidence as non-reusable. A reviewer reproduction is independent evidence and should not be skipped merely because an implementer command has a reusable record.
+
 ## Final fixed-point gate
 
-After the last fix, the orchestrator runs the canonical repository test, lint, type, build, and lifecycle commands required for the changed surface. This is the pre-commit code-state gate. Read complete output and record exit status; do not infer success from a sub-agent report.
+After the last fix, the orchestrator runs the canonical repository test, lint, type, build, and lifecycle commands required for the changed surface. This is the pre-commit code-state gate. Read complete output and record a complete evidence record; do not infer success from a sub-agent report.
 
 If exit reconciliation or transactional landing mutates inputs covered by that gate, rerun the affected canonical commands after landing. If it changes only lifecycle state covered by a separate resolver, run that resolver rather than repeating an unrelated expensive suite.
 
@@ -35,7 +47,7 @@ After fast-forward integration and before cleanup, prove:
 
 Do not automatically rerun an unchanged expensive suite solely because the commit moved by fast-forward. Run the checks whose evidence could have changed at integration.
 
-After all items, run one repository-wide canonical gate on the landing branch.
+After all items, run one repository-wide canonical gate on the landing branch unless the final fixed-point evidence has an equivalent covered-input and execution-context fingerprint after landing. In that case, reuse the evidence and still run merged-state and lifecycle checks whose inputs can differ at integration.
 
 ## Report boundaries honestly
 
