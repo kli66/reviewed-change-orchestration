@@ -1,3 +1,7 @@
+---
+persistence: living
+---
+
 # Model routing
 
 Choose capability tiers against models the host actually exposes. Optimize total cost, including retries and extra turns, rather than token price alone.

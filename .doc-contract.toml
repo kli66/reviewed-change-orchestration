@@ -1,0 +1,20 @@
+schema_version = 1
+repo_name = "reviewed-change-orchestration"
+roadmap = "docs/roadmap.md"
+edge_fingerprints = "advisory"
+
+[root_nodes]
+agents = "AGENTS.md"
+skill = "SKILL.md"
+roadmap = "docs/roadmap.md"
+fixer_prompt = "references/fixer-prompt.md"
+implementer_prompt = "references/implementer-prompt.md"
+model_routing = "references/model-routing.md"
+orchestrator_checklist = "references/orchestrator-checklist.md"
+reviewer_prompt = "references/reviewer-prompt.md"
+validation_policy = "references/validation-policy.md"
+worktree_lifecycle = "references/worktree-lifecycle.md"
+
+[capability]
+mode = "optional"
+command = ["python3", "-m", "json.tool", "evals/evals.json"]

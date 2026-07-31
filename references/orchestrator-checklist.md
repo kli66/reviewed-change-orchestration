@@ -1,3 +1,7 @@
+---
+persistence: living
+---
+
 # Orchestrator checklist
 
 ## Sequence setup

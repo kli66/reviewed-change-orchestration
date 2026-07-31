@@ -1,3 +1,7 @@
+---
+persistence: living
+---
+
 # Item worktree lifecycle
 
 The orchestrator owns every operation in this file. Delegated agents receive an absolute worktree path but no branch, integration, or cleanup authority.

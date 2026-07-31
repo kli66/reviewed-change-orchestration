@@ -1,3 +1,7 @@
+---
+persistence: living
+---
+
 # Read-only reviewer prompt template
 
 Use a fresh-context reviewer. Supply repository facts and evidence, not the implementer's confidence or design narrative.

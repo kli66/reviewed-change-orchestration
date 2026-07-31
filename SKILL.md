@@ -1,6 +1,7 @@
 ---
 name: reviewed-change-orchestration
 description: Land one or more accepted, non-trivial repository change items with orchestrator-owned worktree isolation, cost-aware implementer/fixer delegation, independent read-only review, repository-native lifecycle handling, validation, fast-forward integration, cleanup, and exactly one neutral landing commit per item, separate from any explicitly authorized prerequisite baseline checkpoint. Use when the user asks to implement and commit accepted changes with independent agent review, to land a sequence of accepted doc-contract changes, or to run a high-assurance implement-review-fix workflow. Do not use for proposals awaiting acceptance, review-only work, ordinary small fixes, or requests that do not authorize commits.
+persistence: living
 ---
 
 # Reviewed change orchestration

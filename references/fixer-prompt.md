@@ -1,3 +1,7 @@
+---
+persistence: living
+---
+
 # Fixer prompt template
 
 Use the original implementer when it remains effective; otherwise dispatch a fresh or more capable fixer. Give it findings verbatim and keep the reviewer read-only.

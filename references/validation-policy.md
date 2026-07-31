@@ -1,3 +1,7 @@
+---
+persistence: living
+---
+
 # Validation policy
 
 Match evidence to the state transition it proves. A green command proves only the exact tree on which it ran.

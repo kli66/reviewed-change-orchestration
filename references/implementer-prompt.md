@@ -1,3 +1,7 @@
+---
+persistence: living
+---
+
 # Implementer prompt template
 
 Replace every bracketed field. Keep the requirements in the accepted artifact rather than retelling the orchestration history.
