@@ -11,6 +11,8 @@ Choose capability tiers against models the host actually exposes. Optimize total
 | Complete specification, mechanical edit, roughly one or two files | `economical` |
 | Multi-file integration, debugging, or prose-heavy requirements | `standard` |
 | Architecture, security, concurrency, migrations, or broad judgment | `strongest` |
+| Pre-implementation review with secrets, destructive behavior, concurrency, or security-sensitive parsing | `strongest` |
+| Pre-implementation review with another triggering risk signal | At least `standard`; raise when signals combine |
 | Initial review | At least the judgment tier warranted by diff size and risk |
 | Scoped re-review of explicit fixes | `economical` or `standard` when the risk is narrow |
 
@@ -35,7 +37,7 @@ The optional `[worktree].root` setting is resolved by the lifecycle policy, with
 
 ## Record every selection
 
-Before each implementer, initial reviewer, fixer, or re-review dispatch, add a model-selection record to the execution map and include it in the role prompt. Record:
+Before each pre-implementation reviewer, implementer, initial reviewer, fixer, or re-review dispatch, add a model-selection record to the execution map and include it in the role prompt. Record:
 
 - change item and dispatch role, including fix round when applicable;
 - task and risk signals used for classification;
@@ -49,7 +51,7 @@ Before each implementer, initial reviewer, fixer, or re-review dispatch, add a m
 Use this compact record shape:
 
 ```text
-item=<change>; role=<implementer|reviewer|fixer|re_review>; round=<n|none>
+item=<change>; role=<pre_implementation_reviewer|implementer|reviewer|fixer|re_review>; round=<n|none>
 signals=<task/diff/risk signals>; policy_tier=<tier>
 config_override=<value and path|none>; user_override=<value|none>
 effective_tier=<tier>; model=<host model>; effort=<host effort>
@@ -62,4 +64,4 @@ Update the record before dispatch when the diff or risk changes. Report records 
 
 Increase capability after two materially unsuccessful fix attempts, when an agent reports that the task exceeds its reasoning capacity, or when newly discovered risk raises the policy tier. Change context or task framing when missing information caused the failure. Repeating an unchanged cheap dispatch usually costs more.
 
-A small reviewer can validate a mechanical diff; a subtle security or concurrency diff needs strong judgment even when its line count is small.
+A small reviewer can validate a mechanical diff; a subtle security or concurrency diff needs strong judgment even when its line count is small. Pre-implementation review is mandatory when credentials or secrets, fail-closed behavior, evidence or identity binding, mutable external inputs, live integrations, import or source provenance, destructive behavior, concurrency, or security-sensitive parsing is present or cannot be ruled out. Use `strongest` for secrets, destructive behavior, concurrency, or security-sensitive parsing; use at least `standard` for another triggering signal and raise it when signals combine.

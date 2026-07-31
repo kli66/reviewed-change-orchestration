@@ -1,10 +1,11 @@
 ---
 id: converge-adversarial-review-contract
 persistence: ephemeral
-status: accepted
+status: landed
 depends_on:
 files_owned:
   - docs/changes/converge-adversarial-review-contract/change.md
+  - .doc-contract.toml
   - SKILL.md
   - references/orchestrator-checklist.md
   - references/model-routing.md
@@ -16,14 +17,17 @@ files_owned:
   - references/validation-policy.md
   - evals/evals.json
 accepted_at: 2026-07-31
+started_at: 2026-07-31
+landed_at: 2026-07-31
+archive_path: docs/changes/archive/2026-07-31-converge-adversarial-review-contract
 ---
 # Converge adversarial review before implementation
 
-Status: Accepted · Accepted 2026-07-31
+Status: Landed · 2026-07-31
 
 **Upstream dependencies:** Current reviewed-change orchestration contract at `bff8295`; the immutable accepted-artifact, independent read-only review, bounded three-round fixer loop, model-selection records, and final-fixed-point gates are available and must remain authoritative.
 **Dependents:** `docs/changes/deepen-evidence-and-readiness/` consumes the stable requirement and finding identities introduced here.
-**Files owned:** `SKILL.md` · `references/orchestrator-checklist.md` · `references/model-routing.md` · `references/implementer-prompt.md` · `references/reviewer-prompt.md` · `references/fixer-prompt.md` · `references/pre-implementation-review-prompt.md` (new) · `references/review-record-contract.md` (new) · `references/validation-policy.md` · `evals/evals.json`
+**Files owned:** `.doc-contract.toml` · `SKILL.md` · `references/orchestrator-checklist.md` · `references/model-routing.md` · `references/implementer-prompt.md` · `references/reviewer-prompt.md` · `references/fixer-prompt.md` · `references/pre-implementation-review-prompt.md` (new) · `references/review-record-contract.md` (new) · `references/validation-policy.md` · `evals/evals.json`
 
 ## Why
 
@@ -42,9 +46,9 @@ The workflow needs a risk-triggered pre-implementation review that derives a sta
 ## Tasks
 
 1. Define an explicit risk decision rule. Inspect the immutable accepted artifact, start-commit repository instructions and durable contracts, and execution map for credentials or secrets, fail-closed behavior, evidence or identity binding, mutable external inputs, live integrations, import or source provenance, destructive behavior, concurrency, and security-sensitive parsing. Trigger when any signal is present or cannot be ruled out; skipping requires a recorded `none` decision with a source-backed rationale for every signal.
-2. Add `references/pre-implementation-review-prompt.md`. Give the reviewer the immutable accepted-artifact reference, item worktree and start commit, protected paths, execution map, and relevant durable contracts; keep it read-only and independent from the implementer.
+2. Add `references/pre-implementation-review-prompt.md` and enroll it as a managed root node in `.doc-contract.toml`. Give the reviewer the immutable accepted-artifact reference, item worktree and start commit, protected paths, execution map, and relevant durable contracts; keep it read-only and independent from the implementer.
 3. Pin relevant durable contracts to the item start commit and define authority precedence. Repository-wide instructions and accepted ADR invariants apply when they explicitly govern every affected path; a requirement present only in another durable document is otherwise an `accepted_artifact_gap`. Any conflict with the accepted artifact is a `contradiction` and stops for user adjudication.
-4. Add `references/review-record-contract.md`. Store an immutable matrix plus `matrix_hash` and an append-only findings ledger in one orchestrator-owned envelope outside the repository index. Give every role the envelope path, immutable matrix hash, and current envelope revision/hash. Appending findings or dispositions changes only the envelope revision/hash and never the matrix bytes or `matrix_hash`.
+4. Add `references/review-record-contract.md` and enroll it as a managed root node in `.doc-contract.toml`. Store an immutable matrix plus `matrix_hash` and an append-only findings ledger in one orchestrator-owned envelope outside the repository index. Give every role the envelope path, immutable matrix hash, and current envelope revision/hash. Appending findings or dispositions changes only the envelope revision/hash and never the matrix bytes or `matrix_hash`.
 5. Allocate requirement IDs once before adjudication: accepted-artifact rows in document order, applicable durable-contract rows in supplied-contract order and source location, then source-less gaps, new-scope proposals, and reviewer concerns in reviewer-report order. Allocate `REQ-001` onward and never renumber within a matrix revision. Allocate findings as `F-001` onward in discovery order; never reuse an ID. A split finding receives new child IDs with a `parent_id`; a merge retains one canonical ID and records `related_ids`.
 6. Define each requirement-matrix row with its source reference, invariant or evidence field, authoritative acquisition point, required re-observation points, comparison or rejection point, side-effect cutoff, value-free diagnostic requirement, focused regression obligation, live-verification mode (`not_required`, `automated`, or `operator_gated`), and unresolved ambiguity. Require explicit `not_applicable` plus a reason rather than blank or invented fields.
 7. Separate requirement classification from finding convergence. Matrix rows use `accepted_obligation`, `accepted_artifact_gap`, `new_scope`, `contradiction`, or `reviewer_concern`. Review findings use `implementation_defect`, `accepted_artifact_gap`, `new_scope`, `contradiction`, or `reviewer_concern` plus independent severity and disposition.

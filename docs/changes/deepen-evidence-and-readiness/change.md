@@ -17,7 +17,7 @@ files_owned:
   - tests/test_evidence.py
   - evals/evals.json
 fingerprints:
-  converge-adversarial-review-contract: d729e0d5e41ba578
+  converge-adversarial-review-contract: 076f7939d2d13c41
 ---
 # Deepen validation evidence and environment readiness
 

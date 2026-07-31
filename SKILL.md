@@ -26,9 +26,10 @@ Use this workflow only when independent review and isolation justify their cost.
 Read these files before the corresponding phase:
 
 - `references/worktree-lifecycle.md` before creating, integrating, or removing an item worktree.
-- `references/model-routing.md` before every implementer, reviewer, fixer, or re-review dispatch. It defines selection records and optional `.reviewed-change-orchestration.toml` routing/worktree overrides.
+- `references/model-routing.md` before every pre-implementation reviewer, implementer, reviewer, fixer, or re-review dispatch. It defines selection records and optional `.reviewed-change-orchestration.toml` routing/worktree overrides.
 - `references/validation-policy.md` while building the execution map and before claiming a boundary is complete.
 - `references/orchestrator-checklist.md` throughout each item.
+- `references/review-record-contract.md` before every item enters implementation, and `references/pre-implementation-review-prompt.md` before dispatching a triggered pre-implementation review.
 - The applicable role prompt before delegating implementation, review, or fixes.
 
 ## Build the execution map
@@ -39,6 +40,9 @@ For each item, record:
 - landing branch, preflight HEAD, and exact item start commit after any authorized prerequisite checkpoint;
 - accepted-artifact policy: repository-managed lifecycle state or named local-only context;
 - owned files, expected durable-document mutations, and later overlaps;
+- the explicit pre-implementation risk decision, including a source-backed rationale for every signal when the decision is `none`;
+- immutable accepted-artifact and applicable durable-contract references pinned to the item start commit;
+- the orchestrator-owned, non-indexed review-record envelope path and ID; its current revision/hash; its immutable requirement matrix hash; requirement/finding namespace; predecessor identity when any; and any failure-domain work packages;
 - focused checks, canonical repository gate, and any live verification;
 - validation evidence records: covered-bytes manifest and fingerprint; exact command; relative working directory plus recorded absolute working-directory audit pointer; normalized repository/worktree execution context; dependency and mutable-external-input identity; exit status; and log path;
 - worktree and temporary branch names;
@@ -76,46 +80,57 @@ Stop on missing acceptance, a live contradiction, or a material scope choice. Fi
 
 For repositories without `doc-contract`, or when an intentionally untracked or ignored artifact is not repository-managed lifecycle state, perform only the applicable repository entry check without inventing a new document lifecycle or requiring the artifact to become tracked.
 
-### 4. Delegate implementation
+### 4. Establish the pre-implementation review contract
+
+Inspect the immutable accepted artifact, start-commit repository instructions and durable contracts, and execution map for credentials or secrets, fail-closed behavior, evidence or identity binding, mutable external inputs, live integrations, import or source provenance, destructive behavior, concurrency, and security-sensitive parsing. Trigger pre-implementation review when any signal is present or cannot be ruled out. A skipped review records `none` plus a source-backed rationale for every signal; silence is not a negative decision.
+
+Every accepted item receives a frozen requirement matrix before implementation. For a `none` risk decision, the orchestrator derives accepted obligations and applicable start-commit invariants directly, allocates IDs, freezes the matrix, and proceeds without a pre-implementation reviewer. For a triggered item, resolve and record an independent pre-implementation reviewer selection, instantiate `references/pre-implementation-review-prompt.md`, and give that fresh-context role the item worktree, immutable accepted-artifact reference, start-commit durable-contract references, execution map, protected paths, and the available envelope path, `envelope_id`, `matrix_hash`, current envelope revision/hash, namespace, and predecessor identity (using explicit pending values before the matrix exists). It is read-only, reports proposed rows in discovery order without stable IDs, and must not rely on the implementer's narrative.
+
+The orchestrator adjudicates direct derivation or the pre-review report into the immutable requirement matrix and append-only findings ledger specified by `references/review-record-contract.md`. Allocate IDs and pin the matrix before implementation. Only a matrix containing accepted obligations may proceed automatically. An accepted-artifact gap, new scope, or contradiction receives `user_ruling_required` and stops without fixer dispatch; resolve a reviewer concern into another class or return it to the user. A resumption requires a revised and reaccepted accepted artifact, or an equivalently authoritative replacement for named local-only context. Retain the prior envelope unchanged as superseded lineage, then create a fresh envelope/path and namespace bound to its final identity; restart entry reconciliation and pre-review for the new matrix revision. A chat ruling alone cannot alter a frozen matrix.
+
+When an item has more than one failure domain, or owned file/test groups have different side-effect cutoffs or evidence dependencies, split its execution map into failure-domain work packages. A package names its requirement IDs, invariants, owned files, side-effect cutoff, focused tests, and evidence dependencies. Freeze packages inside the matrix bytes, so `matrix_hash` covers them. Packages do not create lifecycle folders, commits, concurrent items, or delegated mutation authority.
+
+### 5. Delegate implementation
 
 Resolve and record the implementer model selection using `references/model-routing.md`, then instantiate `references/implementer-prompt.md` with that record, the absolute item-worktree path, and the execution map. The implementer may edit only the item worktree and runs focused validation. It may not stage, commit, merge, land, archive, create or delete branches/worktrees, or edit the landing checkout.
 
 Inspect the resulting status, changed files, diff, and test evidence yourself. An agent report never proves the worktree state.
 
-### 5. Obtain independent review
+### 6. Obtain independent review
 
 Resolve and record an independent reviewer selection, then instantiate `references/reviewer-prompt.md` for a fresh-context, read-only reviewer. Dispatch once and wait for completion or a meaningful reviewer message; do not repeatedly resend an unchanged prompt. Give it pointers to:
 
 - the accepted-artifact pointer from which requirements and exclusions are derived;
 - the item start commit and absolute worktree path;
 - the accepted artifact and its immutable reference (the start-commit path for tracked artifacts, or a path and content hash for local-only context);
+- the review-record envelope path and ID, immutable matrix hash, current envelope revision/hash, namespace, predecessor identity when any, and applicable frozen work packages;
 - protected unrelated paths;
 - implementer exact commands, covered-bytes manifests/fingerprints, relative working directories, recorded absolute working-directory audit pointers, normalized contexts, dependency and mutable-external-input identities, exit statuses, and log paths.
 
 The reviewer derives current status, the start-to-current diff, changed and untracked files, implementation, and tests locally. Do not paste the full diff or raw command output into the prompt.
 
-Require separate requirement-compliance and code-quality verdicts. The reviewer may inspect and run non-destructive checks, but may not edit files or perform lifecycle or Git mutations.
+Require separate requirement-compliance and code-quality verdicts. The reviewer verifies the accepted artifact and frozen matrix together rather than recreating uncited requirements from scratch, recomputes the matrix and current envelope identities, and reports existing stable finding IDs plus newly discovered findings in provisional discovery order. The reviewer may inspect and run non-destructive checks, but may not edit files or perform lifecycle or Git mutations.
 
-### 6. Fix and re-review
+### 7. Fix and re-review
 
-Critical or Important findings, failed compliance, or a confirmed acceptance gap enter a bounded loop:
+Critical or Important implementation defects or failed compliance caused by implementation enter a bounded loop:
 
-1. Adjudicate any finding that conflicts with accepted scope. Do not silently redesign the item.
+1. Resolve every reviewer concern into another finding class or return it to the user. An accepted-artifact gap, new scope, or contradiction stops for `user_ruling_required`; do not silently redesign the item or send it to a fixer.
 2. Instantiate `references/fixer-prompt.md` for the original implementer or a separate fixer.
 3. Run affected focused checks.
-4. Dispatch a scoped read-only re-review with the current worktree, original start commit, immutable accepted-artifact reference, protected paths, open findings, and fixer command/evidence/exit-status/log pointers. A supplied fix diff is context only, never its source of truth.
+4. Dispatch a scoped read-only re-review with the current worktree, original start commit, immutable accepted-artifact reference, full review-record identity tuple (envelope path, `envelope_id`, `matrix_hash`, current envelope revision/hash, namespace, and predecessor identity), protected paths, open findings, and fixer command/evidence/exit-status/log pointers. A supplied fix diff is context only, never its source of truth.
 
 Create a fresh selection record for every fixer and re-review dispatch. Use at most three fix rounds. After two materially unsuccessful attempts, increase model capability or change the task framing instead of repeating the same dispatch, and record the escalation. If a load-bearing finding remains after the third round, retain the worktree and branch and stop for user direction.
 
-Record Minor findings explicitly; fix them when low-risk and in scope, otherwise report them as residual risk.
+Record Minor implementation defects explicitly; fix them when low-risk and in scope, otherwise record them as `accepted_residual`. A `rejected_as_reviewer_error` disposition is orchestrator-owned and requires rationale. The orchestrator assigns stable IDs to initial-review findings when appending them; fixers and re-reviewers report dispositions against those stable IDs. The ledger may advance revision/hash but never changes matrix bytes or `matrix_hash`.
 
-### 7. Reach the final fixed point
+### 8. Reach the final fixed point
 
 The orchestrator inspects all source, tests, public documentation, untracked additions, and lifecycle mutations. Run the canonical repository gate now, after the final code change. Record fresh evidence for this exact worktree state using the validation evidence format; `HEAD` and dirty status are provenance, not the reusable state identity.
 
 For a reproducible defect, add a regression test first when the repository has a useful seam and prove it fails without the fix. Do not impose test-first work where no meaningful harness exists.
 
-### 8. Reconcile exit and land lifecycle state
+### 9. Reconcile exit and land lifecycle state
 
 When the accepted artifact is repository-managed through `doc-contract`, invoke `/doc-contract reconcile <change-folder> exit`, then run `doc-contract land <change-folder> --repo-root <item-worktree> --dry-run`. Inspect its complete write/move plan and diff before running the same command without `--dry-run`. Use the repository's vendored equivalent when required. Do not hand-roll status, roadmap, archive, graph, or fingerprint mutations.
 
@@ -123,7 +138,7 @@ For named local-only artifacts, skip reconciliation and landing. Keep them outsi
 
 Run the canonical gate again only when exit reconciliation or landing changed inputs that the gate covers. Otherwise retain the fresh final-fixed-point evidence and run the relevant lifecycle check.
 
-### 9. Create the item commit
+### 10. Create the item commit
 
 Only the orchestrator stages and commits:
 
@@ -137,7 +152,7 @@ Only the orchestrator stages and commits:
 
 Do not push, create a PR, deploy, or mutate remote branches without separate authorization.
 
-### 10. Integrate, verify, and clean up
+### 11. Integrate, verify, and clean up
 
 Follow `references/worktree-lifecycle.md`. Confirm the landing branch has not moved from the item's recorded start commit, then fast-forward it to the item commit. Never resolve divergence by force, reset, or an implicit merge commit. Before cleanup, classify all parent and nested-submodule residue and snapshot landing-checkout submodule configuration/status; linked-worktree cleanup must not deinitialize shared landing configuration.
 

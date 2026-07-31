@@ -159,9 +159,60 @@
       "prompt": "An accepted item has one Important finding. Dispatch a fixer and a scoped re-review, then decide whether to reuse a gate after fast-forward when covered bytes match but a dependency version, mutable external input, or normalized execution context differs.",
       "expected_output": "The scoped re-review receives immutable artifact and evidence pointers plus the open finding, derives current state locally, reports separate compliance and quality verdicts, and reruns every affected gate when any evidence-identity component differs.",
       "assertions": [
-        "Provides the current worktree, original start commit, immutable accepted-artifact reference, protected paths, open findings/rulings, and fixer command/evidence/exit-status/log pointers; a fix diff is context only.",
+        "Provides the current worktree, original start commit, immutable accepted-artifact reference, full review-record identity tuple (envelope path, `envelope_id`, `matrix_hash`, current envelope revision/hash, namespace, and predecessor identity), protected paths, open findings/rulings, and fixer command/evidence/exit-status/log pointers; a fix diff is context only.",
         "Requires separate Requirement compliance and Code quality verdicts and explicit disposition of each open finding.",
         "Rejects evidence reuse when covered bytes, dependency identity, mutable external inputs, command/relative working directory, or normalized execution context differ, while treating absolute paths and Git provenance as audit pointers rather than reusable state identity."
+      ],
+      "files": []
+    },
+    {
+      "id": 15,
+      "prompt": "Land the accepted change that adds a credential-bearing live account gate. It receives a secret from the operator environment, must bind evidence to the configured account and source revision, and must reject mismatch before issuing a live request. The live system is reachable only with an operator approval. Implement and commit it locally with independent review.",
+      "expected_output": "The workflow triggers strongest pre-implementation review before implementation, freezes a value-free requirement matrix and operator-gated live-test obligation, then preserves independent final review and the normal bounded fixing rules.",
+      "assertions": [
+        "Triggers pre-implementation review for credentials, live integration, fail-closed behavior, evidence or identity binding, mutable inputs, and source provenance rather than treating the item as an ordinary implementation dispatch.",
+        "Creates the frozen requirement record before implementation with an authoritative acquisition point, required re-observation, rejection before a live side effect, value-free diagnostic rule, source-origin obligation, and `operator_gated` live verification mode.",
+        "Uses the strongest pre-implementation reviewer tier, gives every role the full review-record identity tuple (envelope path, `envelope_id`, `matrix_hash`, current envelope revision/hash, namespace, and predecessor identity), and never records a credential value or credential-bearing URI.",
+        "Computes the frozen matrix and any failure-domain work packages as canonical UTF-8 JSON with sorted keys, compact separators, no non-finite values, and a SHA-256 matrix hash that covers the packages.",
+        "Reports the operator-gated live test as not run when authority or credentials are unavailable instead of claiming automated verification."
+      ],
+      "files": []
+    },
+    {
+      "id": 16,
+      "prompt": "Land the accepted low-risk local refactor that renames one private helper and updates its focused unit test. It has no credentials, external inputs, live integration, destructive behavior, concurrency, fail-closed path, identity binding, provenance concern, or security-sensitive parsing. Implement and commit locally with independent review.",
+      "expected_output": "The workflow records a source-backed `none` decision for every risk signal, skips only the pre-implementation reviewer, freezes an orchestrator-derived matrix before implementation, and still performs final independent read-only review, fixed-point validation, and normal lifecycle safeguards.",
+      "assertions": [
+        "Records `none` with a source-backed rationale for every pre-implementation risk signal rather than silently skipping the decision.",
+        "Omits the pre-implementation reviewer only because every signal is ruled out, not because the change is small or already has a test; the orchestrator still derives accepted obligations and applicable invariants, allocates `REQ-*` IDs, and freezes a matrix before implementation.",
+        "Gives final review the matrix/envelope identities and requires recomputation of canonical matrix SHA-256 plus the current ordered-ledger envelope identity.",
+        "Retains fresh independent final review, separate compliance and quality verdicts, exact staging, final-fixed-point validation, fast-forward-only integration, and owned cleanup."
+      ],
+      "files": []
+    },
+    {
+      "id": 17,
+      "prompt": "The accepted artifact says to add a local parser option. During pre-implementation review, a durable operations guide requires rotating the production credential whenever that option changes, but the accepted artifact never authorizes credential rotation. Decide whether to implement, fix, or escalate.",
+      "expected_output": "The workflow records a stable accepted-artifact-gap finding in the frozen review record, assigns `user_ruling_required`, and stops without implementation or fixer dispatch until a revised and reaccepted authority starts a separately namespaced successor envelope bound to the retained predecessor.",
+      "assertions": [
+        "Classifies the guide-only requirement as `accepted_artifact_gap` rather than silently importing it into accepted scope or calling it an implementation defect.",
+        "Allocates stable requirement and finding IDs, records `user_ruling_required`, and preserves the frozen matrix hash while the ledger revision/hash may advance.",
+        "Does not dispatch a fixer or proceed to implementation; resumption requires lifecycle reacceptance or an equivalently authoritative local-only replacement, then fresh entry reconciliation and pre-implementation review.",
+        "Retains the superseded envelope unchanged through the reporting and recovery boundary, then creates a uniquely identified successor path with a reset revision counter and empty ledger, fresh explicit REQ/F namespace, and a canonical predecessor object containing the predecessor final envelope hash, matrix hash, and accepted-artifact identity.",
+        "Requires the successor envelope hash to cover its ID, namespace, matrix hash, current ledger hash, revision, and predecessor object, and requires review to recompute that lineage without rewriting either envelope."
+      ],
+      "files": []
+    },
+    {
+      "id": 18,
+      "prompt": "A fixer resolves F-003 in an accepted local validation change. During scoped re-review, the reviewer says the item must now add tenant-wide audit retention, which is absent from the accepted artifact and frozen matrix. Decide the disposition and next action.",
+      "expected_output": "The workflow preserves F-003's stable identity, classifies the proposed audit retention as `new_scope`, records `user_ruling_required`, leaves the frozen matrix hash unchanged, and does not dispatch another fixer for it.",
+      "assertions": [
+        "Keeps F-003 and its disposition stable across fixing and scoped re-review; a split uses new child IDs with `parent_id` and a merge records `related_ids` without reusing IDs.",
+        "Classifies the purported audit-retention obligation as `new_scope`, independent from severity and disposition, rather than allowing re-review to expand accepted scope.",
+        "Records `user_ruling_required`, performs no fixer dispatch for the new scope, and preserves frozen matrix bytes and hash while only the append-only chained ledger and envelope revision/hash change.",
+        "Requires independent recomputation of the canonical matrix hash, ordered ledger chain, and current envelope hash; any work package remains inside the frozen matrix bytes.",
+        "Retains separate requirement-compliance and code-quality verdicts, independent re-review, the three-round cap for actual implementation defects, and all existing isolation and landing guarantees."
       ],
       "files": []
     }

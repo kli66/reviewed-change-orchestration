@@ -18,9 +18,15 @@ Run focused tests and changed-surface formatting, lint, or type checks. Add a di
 
 For a reproducible defect with a useful seam, prove regression coverage by observing the test fail without the fix and pass with it. Do not require test-first work for document-only changes or code without a meaningful harness.
 
+## Pre-implementation review evidence
+
+For every accepted item, record the explicit risk decision, immutable accepted-artifact reference, start-commit durable-contract references, and the full review-record identity tuple: envelope path, `envelope_id`, frozen `matrix_hash`, current envelope revision/hash, namespace, and predecessor identity when any. Also record applicable work packages before implementation. A `none` decision skips only the pre-implementation reviewer: the orchestrator derives and freezes accepted obligations and applicable invariants directly. A triggered item incorporates the independent pre-review report before freezing. A credential-bearing, fail-closed, identity-bound, mutable, live, provenance-sensitive, destructive, concurrent, or security-sensitive boundary needs an acquisition point, required re-observation, rejection point before side effects, and value-free diagnostic obligation in its matrix row.
+
+Live verification is `not_required`, `automated`, or `operator_gated`. An operator-gated check is not claimed as automated coverage: record its required authority, credential boundary, and result separately. If credentials, infrastructure, or authority are unavailable, report that live verification as not run. Do not persist credential values, credential-bearing URIs, or raw unbounded secret-bearing output in evidence, diagnostics, logs, the envelope, or eval results.
+
 ## Reviewer evidence
 
-The read-only reviewer inspects requirements, actual diff, changed and untracked files, tests, and implementer results. It may run focused reproductions or non-destructive checks, especially for risky failure paths. Its primary independent value is judgment, not ceremonial repetition of an unchanged full suite.
+The read-only reviewer receives and inspects the full review-record identity tuple: envelope path, `envelope_id`, `matrix_hash`, current envelope revision/hash, namespace, and predecessor identity. It also inspects the accepted artifact, frozen requirement matrix, actual diff, changed and untracked files, tests, and implementer results. It may run focused reproductions or non-destructive checks, especially for risky failure paths. It recomputes the matrix and current envelope identities, verifies cited requirements rather than recreating uncited scope, reports existing stable finding IDs and new findings in provisional discovery order, and keeps requirement-compliance and code-quality verdicts separate. Its primary independent value is judgment, not ceremonial repetition of an unchanged full suite.
 
 ## Evidence identity and reuse
 
