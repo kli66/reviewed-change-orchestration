@@ -10,13 +10,15 @@ The living orchestration contract is `SKILL.md` plus its phase and role referenc
 
 - `docs/changes/archive/2026-07-31-converge-adversarial-review-contract/` (landed) — establish risk-triggered pre-implementation review and stable requirement and finding identities.
 - `docs/changes/deepen-evidence-and-readiness/` (proposed) — deepen readiness and validation evidence after the review-record contract is stable.
-- `docs/changes/integrate-planned-accept-and-execute/` (blocked) — consume a doc-contract-owned acceptance plan after the evidence interface and provider capability exist.
+- `docs/changes/integrate-planned-accept-and-execute/` (blocked) — consume a review-bound doc-contract acceptance plan after the local evidence interface and external provider capability land.
 
 <!-- BEGIN GENERATED DAG (regenerate: doc-contract update --repo-root .) -->
 ```mermaid
 flowchart TD
     converge_adversarial_review_contract["converge-adversarial-review-contract (landed)"]
     deepen_evidence_and_readiness["deepen-evidence-and-readiness (proposed)"]
+    integrate_planned_accept_and_execute["integrate-planned-accept-and-execute (blocked)"]
     converge_adversarial_review_contract --> deepen_evidence_and_readiness
+    deepen_evidence_and_readiness --> integrate_planned_accept_and_execute
 ```
 <!-- END GENERATED DAG -->
