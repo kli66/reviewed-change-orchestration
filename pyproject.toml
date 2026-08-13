@@ -1,0 +1,11 @@
+[project]
+name = "reviewed-change-orchestration"
+version = "0.1.0"
+description = "Offline accepted-work envelope contract tools"
+requires-python = ">=3.12"
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

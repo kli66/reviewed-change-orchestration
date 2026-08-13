@@ -37,6 +37,10 @@ An envelope never receives a replacement matrix. On an authoritative artifact re
 
 The successor's canonical `predecessor` object contains the predecessor envelope ID, final predecessor `envelope_hash`, predecessor `matrix_hash`, and predecessor accepted-artifact reference. It is part of the successor `envelope_hash` input. The initial envelope uses an explicit canonical `predecessor: null`. A reviewer verifies the predecessor object against the retained predecessor envelope, confirms that the prior matrix and ledger are unchanged, and recomputes the successor identity. This binds each new attempt deterministically to its superseded lineage without rewriting either envelope.
 
+## Machine reuse by accepted-work envelopes
+
+`ReviewedItemHistory` imports this contract under exact `review_contract_id = "reviewed-change-orchestration.review-record"` and `review_contract_version = "0.1.0"`. Its schema records this contract's immutable `matrix_hash`, current `envelope_hash`, namespace, requirement IDs, and finding identities. It reuses—not forks—the matrix classifications, finding classes, `Critical`/`Important`/`Minor` severities, dispositions, and independent requirement-compliance/code-quality verdicts defined below. A history that claims `reviewed_success` must therefore retain these exact identities and only the disposition combinations permitted by this contract.
+
 ## Findings ledger and convergence
 
 The orchestrator allocates finding IDs as `F-001` onward in discovery order when appending to the ledger; never reuse an ID. An initial final reviewer reports newly discovered findings as provisional ordinals in discovery order, not `F-*` IDs. A split finding receives new child IDs and `parent_id`. A merge retains one canonical ID and records `related_ids`. Fixers and re-reviewers use the IDs already assigned by the orchestrator.
