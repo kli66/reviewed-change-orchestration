@@ -10,18 +10,16 @@ The living orchestration contract is `SKILL.md` plus its phase and role referenc
 
 - `docs/changes/archive/2026-07-31-converge-adversarial-review-contract/` (landed) — establish risk-triggered pre-implementation review and stable requirement and finding identities.
 - `docs/changes/archive/2026-08-13-define-v0-accepted-work-envelopes/` (landed) — define the four versioned, strategy-neutral accepted-work envelopes and their offline owner validation seam.
-- `docs/changes/deepen-evidence-and-readiness/` (proposed) — deepen readiness and validation evidence after the review-record contract is stable.
-- `docs/changes/integrate-planned-accept-and-execute/` (blocked) — transfer an owned provisional draft into the item worktree, bind review-bound acceptance to an immutable artifact snapshot, and land lineage plus implementation in one final commit after the local evidence interface and external provider capability land.
+- `docs/changes/archive/2026-08-16-defer-stale-owner-work/` (landed) — move two pre-coordination proposals into trigger-gated deferred work, correct landed status wording, and remove obsolete local recovery state.
+- `docs/spec/deferred-work.md` (deferred register) — preserve validation-evidence and review-bound accept-and-execute options until their explicit promotion triggers fire.
 
 <!-- BEGIN GENERATED DAG (regenerate: doc-contract update --repo-root .) -->
 ```mermaid
 flowchart TD
     converge_adversarial_review_contract["converge-adversarial-review-contract (landed)"]
-    deepen_evidence_and_readiness["deepen-evidence-and-readiness (proposed)"]
+    defer_stale_owner_work["defer-stale-owner-work (landed)"]
     define_v0_accepted_work_envelopes["define-v0-accepted-work-envelopes (landed)"]
-    integrate_planned_accept_and_execute["integrate-planned-accept-and-execute (blocked)"]
-    converge_adversarial_review_contract --> deepen_evidence_and_readiness
     converge_adversarial_review_contract --> define_v0_accepted_work_envelopes
-    deepen_evidence_and_readiness --> integrate_planned_accept_and_execute
+    define_v0_accepted_work_envelopes --> defer_stale_owner_work
 ```
 <!-- END GENERATED DAG -->

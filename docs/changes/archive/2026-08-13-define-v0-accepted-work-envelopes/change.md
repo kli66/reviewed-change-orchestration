@@ -36,7 +36,7 @@ The first harness dogfood needs one semantic owner for exact accepted input, att
 
 The smallest useful seam is therefore one deep, standard-library contract module whose only cross-project record kinds are `AcceptedBundle`, `AttemptBinding`, `ReviewedItemHistory`, and `CandidateBundle`. The module owns structural validation, deterministic canonical encoding, content identity, lineage checks, and pure comparison with explicit caller observations. It does not own acceptance decisions, repository observation, Git mutation, evidence storage, orchestration, candidate assembly, packet rendering, or canonical integration.
 
-The change is in progress under its accepted lifecycle. It defines and validates an offline contract only; it does not accept real work, run a controller, or authorize any repository or external effect.
+The change is landed. It defines and validates an offline contract only; it does not accept real work, run a controller, or authorize any repository or external effect.
 
 ## What changes
 
