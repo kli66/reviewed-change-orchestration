@@ -29,7 +29,38 @@ Matrix classifications are `accepted_obligation`, `accepted_artifact_gap`, `new_
 
 The frozen matrix bytes are canonical UTF-8 JSON: standard-library `json.dumps` with `sort_keys=True`, `separators=(',', ':')`, `ensure_ascii=False`, and `allow_nan=False`, encoded as UTF-8. The frozen object includes the matrix revision, pinned source references, requirement rows, and all work packages. `matrix_hash` is its SHA-256 digest, so package membership is immutable and independently verifiable.
 
-The ledger is ordered and append-only. Its empty root is the SHA-256 digest of canonical JSON `[]`. Each entry contains its sequence number, previous ledger hash, and its value-free finding or disposition payload; its ledger hash is the SHA-256 digest of that canonical entry. The current ledger hash is the last entry hash, which commits to every preceding entry in order. `envelope_revision` starts at `1` when the matrix is frozen and increments once per append. `envelope_hash` is the SHA-256 digest of canonical JSON containing `envelope_id`, namespace, `matrix_hash`, current ledger hash, `envelope_revision`, and predecessor. A role recomputes `matrix_hash`, validates every ledger link, verifies the predecessor identity when present, then recomputes `envelope_hash` before relying on the record.
+The ledger is ordered and append-only. Its empty root is the SHA-256 digest of canonical JSON `[]`. Each entry contains its sequence number, previous ledger hash, and its value-free finding or disposition payload; its ledger hash is the SHA-256 digest of that canonical entry. The current ledger hash is the last entry hash, which commits to every preceding entry in order. `envelope_revision` starts at `1` when the matrix is frozen and increments once per append. `envelope_hash` is the SHA-256 digest of canonical JSON containing `envelope_id`, namespace, `matrix_hash`, current ledger hash, `envelope_revision`, and predecessor. A role recomputes `matrix_hash`, validates every ledger link, verifies the predecessor identity when present, then recomputes `envelope_hash` before relying on the record — using `scripts/review_record_envelope.py verify` (see Offline tooling).
+
+## Offline tooling
+
+`scripts/review_record_envelope.py` implements the identity rules above verbatim with the
+standard library only. Every orchestrator role recomputes identities with it instead of
+hand-rolling canonical JSON or hash math:
+
+```text
+python3 scripts/review_record_envelope.py matrix-hash --input <path|->
+python3 scripts/review_record_envelope.py ledger-hash --input <path|->
+python3 scripts/review_record_envelope.py init --dir <dir> --envelope-id <id> --namespace <ns> [--predecessor <envelope.json> --predecessor-artifact <reference>]
+python3 scripts/review_record_envelope.py freeze --dir <dir> --matrix <path|-> [--predecessor <envelope.json>]
+python3 scripts/review_record_envelope.py append --dir <dir> --payload <path|-> [--predecessor <envelope.json>]
+python3 scripts/review_record_envelope.py verify --dir <dir> [--predecessor <envelope.json>]
+```
+
+`matrix-hash` and `ledger-hash` recompute identities from supplied JSON. `init` creates a
+pending envelope (revision 0); `freeze` transitions it to revision 1 with the frozen
+matrix; `append` adds one value-free finding/disposition entry and advances the revision;
+`verify` recomputes the matrix hash, validates every ledger link, verifies a supplied
+predecessor binding, and recomputes the envelope hash — exit 0 only when the stored
+record is coherent. Successor `freeze`, `append`, and `verify` invocations require
+`--predecessor` with the retained predecessor envelope path; omitting it refuses the
+operation without changing the record. The managed directory layout is `envelope.json`, `matrix.json`, and
+`ledger.json`; storage remains orchestrator-owned, and `verify` always recomputes from
+the bytes actually on disk. Every command emits one canonical result object with
+`result_id` `reviewed-change-orchestration.review-record-envelope-result`, version
+`0.1.0`, sorted value-free errors, and exit codes 0/1/2 (success / invalid-or-incoherent
+/ invocation-or-I/O). Tests: `tests/test_review_record_envelope.py`. The tool validates
+identity and chain semantics only; matrix row structure, finding classes, severities,
+and dispositions remain prose-owned by this contract.
 
 ## Superseded-envelope lineage
 
