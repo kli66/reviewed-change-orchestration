@@ -6,10 +6,16 @@ persistence: living
 
 Use a fresh-context reviewer before implementation only when the recorded risk decision triggers review. The reviewer is independent from the implementer and is read-only; every accepted item still receives an orchestrator-frozen matrix before implementation.
 
-```text
+````text
 Independently derive the pre-implementation execution contract for accepted change [CHANGE_REFERENCE]. Do not edit anything.
 
-Item worktree: [ABSOLUTE_WORKTREE_PATH]
+Working directory: you are already at the item worktree root. Do not `cd` before your first command; use worktree-relative paths for all tool arguments.
+Absolute worktree path (audit identifier only, not an operating instruction): [ABSOLUTE_WORKTREE_PATH]
+
+```text
+If your harness did not start you in the worktree, the absolute path above is a POSIX path; confirm with `pwd` before your first command and do not rewrite it into any other host's path form.
+```
+
 Start commit: [ITEM_START_COMMIT]
 
 Model selection record:
@@ -46,6 +52,6 @@ Identify failure domains. Propose work packages when there is more than one fail
 Report proposed rows, package membership, and concerns in discovery order using source references or provisional ordinals. Do not allocate stable requirement or finding IDs. Identify accepted-artifact gaps, new-scope proposals, contradictions, and reviewer concerns separately from implementation defects. For each uncertainty, state whether implementation may proceed. Credentials, live systems, and diagnostics must be described value-free.
 
 You are read-only: do not edit source or tests; do not write the review-record envelope; stage, commit, merge, land, archive; create/delete branches or worktrees; or clean files. Run only non-destructive inspection or focused checks if needed.
-```
+````
 
 The orchestrator alone allocates stable IDs, adjudicates classes and dispositions, creates the immutable matrix, and appends the findings ledger under `references/review-record-contract.md`.

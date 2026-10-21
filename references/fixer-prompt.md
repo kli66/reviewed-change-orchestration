@@ -6,10 +6,16 @@ persistence: living
 
 Use the original implementer when it remains effective; otherwise dispatch a fresh or more capable fixer. Give it findings verbatim and keep the reviewer read-only.
 
-```text
+````text
 Fix the adjudicated review findings for accepted change [CHANGE_REFERENCE].
 
-Work only in this item worktree: [ABSOLUTE_WORKTREE_PATH]
+Working directory: you are already at the item worktree root. Do not `cd` before your first command; use worktree-relative paths for all tool arguments.
+Absolute worktree path (audit identifier only, not an operating instruction): [ABSOLUTE_WORKTREE_PATH]
+
+```text
+If your harness did not start you in the worktree, the absolute path above is a POSIX path; confirm with `pwd` before your first command and do not rewrite it into any other host's path form.
+```
+
 Start commit: [ITEM_START_COMMIT]
 Fix round: [ROUND] of 3
 
@@ -44,6 +50,6 @@ Report:
 - files changed;
 - commands run with exact pass/fail results, covered-bytes manifests/fingerprints, exact command, relative working directory plus recorded absolute audit pointer, normalized execution context, dependency and mutable-external-input identity, and log paths;
 - any finding still open or requiring a product/architecture decision.
-```
+````
 
-After every fix dispatch, send a read-only scoped re-review the current item-worktree path, original start commit, immutable accepted-artifact reference, and the full review-record identity tuple: envelope path, `envelope_id`, `matrix_hash`, current envelope revision/hash, namespace, and predecessor identity. Also provide protected paths, open findings/rulings, and fixer command/evidence/exit-status/log pointers. A fix diff may be supplied only as context; the reviewer derives the current state locally and separately reports compliance and quality verdicts. Do not accept the fixer's own clearance as closure.
+After every fix dispatch, launch a read-only scoped re-review in the item worktree under the delegated working-directory contract in `references/worktree-lifecycle.md`, and provide the original start commit, immutable accepted-artifact reference, and the full review-record identity tuple: envelope path, `envelope_id`, `matrix_hash`, current envelope revision/hash, namespace, and predecessor identity. Also provide protected paths, open findings/rulings, and fixer command/evidence/exit-status/log pointers. A fix diff may be supplied only as context; the reviewer derives the current state locally and separately reports compliance and quality verdicts. Do not accept the fixer's own clearance as closure.

@@ -6,10 +6,16 @@ persistence: living
 
 Replace every bracketed field. Keep the requirements in the accepted artifact rather than retelling the orchestration history.
 
-```text
+````text
 Implement accepted change [CHANGE_REFERENCE].
 
-Work only in this item worktree: [ABSOLUTE_WORKTREE_PATH]
+Working directory: you are already at the item worktree root. Do not `cd` before your first command; use worktree-relative paths for all tool arguments.
+Absolute worktree path (audit identifier only, not an operating instruction): [ABSOLUTE_WORKTREE_PATH]
+
+```text
+If your harness did not start you in the worktree, the absolute path above is a POSIX path; confirm with `pwd` before your first command and do not rewrite it into any other host's path form.
+```
+
 Start commit: [ITEM_START_COMMIT]
 
 Model selection record:
@@ -51,6 +57,6 @@ Report:
 - deviations, ambiguities, or descoped criteria;
 - commands run with exact pass/fail results, covered-bytes manifests/fingerprints, exact command, relative working directory plus recorded absolute audit pointer, normalized execution context, dependency and mutable-external-input identity, and log paths;
 - validation that could not be performed.
-```
+````
 
 Do not let an implementer turn ambiguity into scope expansion. Provide missing context, increase capability, or return the decision to the user.

@@ -215,6 +215,19 @@
         "Retains separate requirement-compliance and code-quality verdicts, independent re-review, the three-round cap for actual implementation defects, and all existing isolation and landing guarantees."
       ],
       "files": []
+    },
+    {
+      "id": 19,
+      "prompt": "Land an accepted change with a pre-implementation reviewer, implementer, independent reviewer, fixer, and scoped re-review. The primary host supports per-child working directories, but another host cannot set them. One model lane has previously rewritten absolute POSIX worktree paths into a Windows-host mount form. Show how each role is launched and prompted on both hosts, and what working-directory evidence is recorded and reported, without changing any role's authority.",
+      "expected_output": "The workflow launches every delegated role at the item worktree root when the host supports it, makes that working directory a prompt fact rather than an absolute-path operating instruction, retains the absolute path only as an audit identifier, and uses a documented, recorded, reported POSIX-only fallback when per-child cwd is unavailable. All isolation and authority boundaries remain unchanged.",
+      "assertions": [
+        "Launches every pre-implementation reviewer, implementer, reviewer, fixer, and re-review with the child's process working directory at the item worktree root wherever the harness supports per-child cwd; the recorded child working directory equals that root, and recorded relative working directories are item-worktree-relative, never landing-checkout-relative.",
+        "Each role prompt states that the child is already at the item worktree root, forbids a cd before the first command, and requires worktree-relative paths for all tool arguments instead of inducing a first-command absolute directory change.",
+        "Retains the absolute worktree path in the execution map and prompt only as an audit identifier, never an operating instruction, under the audit-pointer semantics owned by references/validation-policy.md.",
+        "When the harness cannot set per-child cwd, explicitly uses the POSIX-only absolute-path fallback with pwd confirmation as the first command and no rewriting into another host's path form; records the mode per dispatch and reports a host that needed only the fallback at sequence completion rather than silently normalizing fallback use.",
+        "Preserves item isolation, read-only pre-implementation review, independent read-only review and re-review, exact submodule approval boundaries, and orchestrator-only branch, staging, commit, merge, landing, and cleanup authority; changing dispatch location grants no additional authority."
+      ],
+      "files": []
     }
   ]
 }

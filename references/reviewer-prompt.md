@@ -6,10 +6,16 @@ persistence: living
 
 Use a fresh-context reviewer. Supply repository facts and evidence, not the implementer's confidence or design narrative.
 
-```text
+````text
 Independently review accepted change [CHANGE_REFERENCE]. Do not edit anything.
 
-Item worktree: [ABSOLUTE_WORKTREE_PATH]
+Working directory: you are already at the item worktree root. Do not `cd` before your first command; use worktree-relative paths for all tool arguments.
+Absolute worktree path (audit identifier only, not an operating instruction): [ABSOLUTE_WORKTREE_PATH]
+
+```text
+If your harness did not start you in the worktree, the absolute path above is a POSIX path; confirm with `pwd` before your first command and do not rewrite it into any other host's path form.
+```
+
 Start commit: [ITEM_START_COMMIT]
 
 Model selection record:
@@ -59,10 +65,10 @@ Then report two explicit verdicts:
 - Code quality: PASS or FAIL
 
 Finally report checks run, exact results, and residual risks. If no findings exist, say so explicitly.
-```
+````
 
 An item advances only when both verdicts pass and no Critical or Important implementation defect remains. An accepted-artifact gap, new scope, or contradiction is `user_ruling_required`, stops without fixer dispatch, and leaves the frozen matrix hash unchanged. The orchestrator resolves reviewer concerns into another class or returns them to the user.
 
 ## Scoped re-review dispatch
 
-Use this same template for every re-review, with `Review scope: re-review round <n>`. It must receive the current item worktree, original start commit, immutable accepted-artifact reference, and the full review-record identity tuple: envelope path, `envelope_id`, `matrix_hash`, current envelope revision/hash, namespace, and predecessor identity. Also provide protected paths, open findings and rulings, and pointers to the fixer commands, evidence manifests, exit statuses, and logs. It derives the current diff and repository state locally; a fix diff may identify the area to inspect but is context only. Report the same separate `Requirement compliance` and `Code quality` verdicts, explicitly stating the disposition of each stable finding ID. A purported new requirement is a `new_scope` or `accepted_artifact_gap`, not a fixer task.
+Use this same template for every re-review, with `Review scope: re-review round <n>`. Launch it in the item worktree under the delegated working-directory contract in `references/worktree-lifecycle.md`. It must receive the original start commit, immutable accepted-artifact reference, and the full review-record identity tuple: envelope path, `envelope_id`, `matrix_hash`, current envelope revision/hash, namespace, and predecessor identity. Also provide protected paths, open findings and rulings, and pointers to the fixer commands, evidence manifests, exit statuses, and logs. It derives the current diff and repository state locally; a fix diff may identify the area to inspect but is context only. Report the same separate `Requirement compliance` and `Code quality` verdicts, explicitly stating the disposition of each stable finding ID. A purported new requirement is a `new_scope` or `accepted_artifact_gap`, not a fixer task.

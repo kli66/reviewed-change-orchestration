@@ -4,7 +4,15 @@ persistence: living
 
 # Item worktree lifecycle
 
-The orchestrator owns every operation in this file. Delegated agents receive an absolute worktree path but no branch, integration, or cleanup authority.
+The orchestrator owns every operation in this file. Delegated agents start in the item worktree but receive no branch, integration, or cleanup authority.
+
+## Delegated working directory
+
+Launch every pre-implementation reviewer, implementer, reviewer, fixer, and re-review dispatch with the child's process working directory set to the item worktree root wherever the host harness supports per-child working directories. The child is already at the worktree root when its first command runs; the recorded child working directory must equal the item worktree root. Each command's recorded relative working directory is consequently relative to the item worktree root, never to the landing checkout.
+
+Keep the absolute worktree path in the execution map and each prompt as an identifier only, in accordance with the audit-pointer semantics owned by `references/validation-policy.md`. The prompt states the working directory as a fact, prohibits a `cd` before the first command, requires worktree-relative paths for all tool arguments, and labels the absolute path as an audit identifier, never an instruction to travel there.
+
+When the host harness cannot set a child's working directory, use the documented fallback: retain the absolute-path handover, explicitly state that the path is POSIX-only, and instruct the child to confirm with `pwd` before its first command without rewriting the path into any other host's path form. The fallback must not silently become the norm. The orchestrator records per dispatch whether the mode was per-child working directory or POSIX-only fallback, and reports any host that needed only the fallback at sequence completion.
 
 ## Discover the host state
 

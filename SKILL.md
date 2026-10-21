@@ -92,7 +92,7 @@ When an item has more than one failure domain, or owned file/test groups have di
 
 ### 5. Delegate implementation
 
-Resolve and record the implementer model selection using `references/model-routing.md`, then instantiate `references/implementer-prompt.md` with that record, the absolute item-worktree path, and the execution map. The implementer may edit only the item worktree and runs focused validation. It may not stage, commit, merge, land, archive, create or delete branches/worktrees, or edit the landing checkout.
+Resolve and record the implementer model selection using `references/model-routing.md`, then instantiate `references/implementer-prompt.md` with that record, the delegated working directory under `references/worktree-lifecycle.md`, and the execution map. The implementer may edit only the item worktree and runs focused validation. It may not stage, commit, merge, land, archive, create or delete branches/worktrees, or edit the landing checkout.
 
 Inspect the resulting status, changed files, diff, and test evidence yourself. An agent report never proves the worktree state.
 
@@ -101,7 +101,7 @@ Inspect the resulting status, changed files, diff, and test evidence yourself. A
 Resolve and record an independent reviewer selection, then instantiate `references/reviewer-prompt.md` for a fresh-context, read-only reviewer. Dispatch once and wait for completion or a meaningful reviewer message; do not repeatedly resend an unchanged prompt. Give it pointers to:
 
 - the accepted-artifact pointer from which requirements and exclusions are derived;
-- the item start commit and absolute worktree path;
+- the item start commit and the item worktree as the reviewer's working directory (absolute path as audit pointer), under `references/worktree-lifecycle.md`;
 - the accepted artifact and its immutable reference (the start-commit path for tracked artifacts, or a path and content hash for local-only context);
 - the review-record envelope path and ID, immutable matrix hash, current envelope revision/hash, namespace, predecessor identity when any, and applicable frozen work packages;
 - protected unrelated paths;
@@ -118,7 +118,7 @@ Critical or Important implementation defects or failed compliance caused by impl
 1. Resolve every reviewer concern into another finding class or return it to the user. An accepted-artifact gap, new scope, or contradiction stops for `user_ruling_required`; do not silently redesign the item or send it to a fixer.
 2. Instantiate `references/fixer-prompt.md` for the original implementer or a separate fixer.
 3. Run affected focused checks.
-4. Dispatch a scoped read-only re-review with the current worktree, original start commit, immutable accepted-artifact reference, full review-record identity tuple (envelope path, `envelope_id`, `matrix_hash`, current envelope revision/hash, namespace, and predecessor identity), protected paths, open findings, and fixer command/evidence/exit-status/log pointers. A supplied fix diff is context only, never its source of truth.
+4. Launch a scoped read-only re-review under the same delegated working directory in `references/worktree-lifecycle.md`, with the original start commit, immutable accepted-artifact reference, full review-record identity tuple (envelope path, `envelope_id`, `matrix_hash`, current envelope revision/hash, namespace, and predecessor identity), protected paths, open findings, and fixer command/evidence/exit-status/log pointers. A supplied fix diff is context only, never its source of truth.
 
 Create a fresh selection record for every fixer and re-review dispatch. Use at most three fix rounds. After two materially unsuccessful attempts, increase model capability or change the task framing instead of repeating the same dispatch, and record the escalation. If a load-bearing finding remains after the third round, retain the worktree and branch and stop for user direction.
 

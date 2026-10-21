@@ -29,7 +29,8 @@ persistence: living
 - Create the orchestrator-owned non-indexed review-record envelope for every item: allocate all `REQ-*` IDs, resolve package membership, freeze matrix bytes and `matrix_hash`, then record its current revision/hash, envelope ID, namespace, and predecessor identity. Keep all work packages inside the frozen matrix bytes. Give every role those pointers.
 - Stop with `user_ruling_required`, without implementation or fixer dispatch, for an accepted-artifact gap, new scope, or contradiction. Resolve each reviewer concern into another class or return it to the user. On authoritative reacceptance, retain the old envelope unchanged as superseded lineage and create a uniquely identified successor path with reset ledger/revision/counters, a new namespace, and a predecessor binding to the prior final envelope hash, matrix hash, and artifact reference. Restart lifecycle entry and pre-review against that successor.
 - Use failure-domain work packages when there is more than one failure domain, or side-effect cutoffs or evidence dependencies differ; each names requirement IDs, invariants, owned files, side-effect cutoff, focused tests, and evidence dependencies without adding lifecycle items or mutation authority.
-- Give the implementer an absolute worktree path and no Git/lifecycle authority.
+- Launch every delegated role at the item worktree root when the host supports per-child cwd, otherwise use the documented POSIX-only fallback with `pwd` confirmation, per `references/worktree-lifecycle.md`; no Git/lifecycle authority either way.
+- Record the working-directory mode per dispatch and report a host that used only the fallback, as required by `references/worktree-lifecycle.md`.
 - Include the resolved implementer selection record in its prompt.
 
 ## Review fixed point
